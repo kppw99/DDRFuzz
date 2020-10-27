@@ -1,5 +1,5 @@
 ## Installation for fuzzing
-**setting CC and CCX path
+**setting CC and CCX path**
 ```
 $ export CC=afl-gcc
 $ export CXX=afl-g++
