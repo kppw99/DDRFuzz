@@ -1,5 +1,4 @@
 ## Installation for fuzzing
-
 **setting CC and CXX path**
 ```
 $ export CC=afl-gcc
