@@ -1,3 +1,6 @@
+## Reference site
+https://hub.docker.com/r/zjuchenyuan/afl
+
 ## Installation for fuzzing
 **setting CC and CXX path**
 ```
