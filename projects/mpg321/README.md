@@ -1,3 +1,8 @@
+## Reference Site
+https://github.com/GiterMirror/mpg321/blob/master/INSTALL
+
+https://groups.google.com/g/afl-users/c/fYqNVP9ZR0g
+
 ## Installation for fuzzing
 **setting CC and CXX path**
 ```
