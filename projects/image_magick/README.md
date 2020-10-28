@@ -9,7 +9,7 @@ $ export CXX=afl-g++
 ```
 **download source code**
 ```
-git clone https://github.com/ImageMagick/ImageMagick.git --depth 1
+git clone https://github.com/ImageMagick/ImageMagick.git
 ```
 **setting configure option and make**
 ```
