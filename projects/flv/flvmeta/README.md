@@ -19,5 +19,5 @@ $ make
 ```
 **fuzzing with AFL**
 ```
-$ afl-fuzz -i seed_flv/ -o output .src/flvmeta @@
+$ afl-fuzz -i seed_flv/ -o output ./src/flvmeta @@ /dev/null
 ```
