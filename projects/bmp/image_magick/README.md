@@ -18,5 +18,5 @@ $ AFL_HARDEN=1 make
 ```
 **fuzzing with AFL**
 ```
-$ afl-fuzz -i seed_bmp/ -o output -- ./magick /dev/null @@
+$ afl-fuzz -i seed_bmp/ -o output -- ./magick @@ /dev/null
 ```
