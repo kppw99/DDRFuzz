@@ -21,5 +21,5 @@ $ make
 ```
 **fuzzing with AFL**
 ```
-$ afl-fuzz -i ~/seed_flv/ -o output ./mp42aac @@
+$ afl-fuzz -i ~/seed_flv/ -o output ./mp42aac @@ /dev/null
 ```
