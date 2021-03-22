@@ -1,1 +1,1 @@
-# DDRFuzz: Data-driven Fuzzing with Seq2Seq model for Seed Generation
+# DDRFuzz (Data-DRiven Fuzzing)
