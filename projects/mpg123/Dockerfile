@@ -1,24 +1,32 @@
-# Copyright 2018 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-################################################################################
+FROM base:ddrfuzz
+MAINTAINER "Sanghoon(Kevin) Jeon <kppw99@gmail.com>"
 
-FROM gcr.io/oss-fuzz-base/base-builder
-RUN apt-get update && apt-get install -y make autoconf automake libtool wget \
-  bzip2
+
+# Set Environment
+ENV CC=afl-gcc
+ENV C++=afl-g++
+
+
+# Prerequisite
+WORKDIR /targets/mpg123/seed/org/
+WORKDIR /targets/mpg123/seed/copt/
+WORKDIR /targets/mpg123/seed/topt/
+WORKDIR /targets/mpg123/bin/
+WORKDIR /targets/mpg123/source/
 RUN wget https://www.mpg123.de/snapshot
-RUN tar -xvf snapshot
-RUN mv mpg123* mpg123
-WORKDIR $SRC
-COPY read_fuzzer.c decode_fuzzer.cc build.sh $SRC/
+RUN tar -xvf snapshot --directory=/targets/mpg123/source --strip-components=1
+RUN rm -rf snapshot
+
+
+# Build Target Program
+WORKDIR /targets/mpg123/source/build/
+RUN CFLAGS="-Os -s" ../configure --with-cpu=generic  --disable-id3v2 --disable-lfs-alias --disable-feature-report --with-seektable=0 --disable-16bit --disable-32bit --disable-8bit --disable-messages --disable-feeder --disable-ntom --disable-downsample --disable-icy --disable-shared
+RUN make
+
+
+# Copy Seed Corpus and Fuzzing Executables
+COPY ./seed /targets/mpg123/seed/org
+RUN cp -rf /targets/mpg123/source/build/src/mpg123 /targets/mpg123/bin/
+
+COPY ./afl-fuzz.sh ./opt-seed.sh /targets/mpg123/
+WORKDIR /targets/mpg123/
