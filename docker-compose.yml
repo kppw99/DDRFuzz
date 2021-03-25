@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+    ddrfuzz:
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        image: base/ddrfuzz:latest
+
+    mpg123:
+        build:
+            context: .
+            dockerfile: ./projects/mpg123/Dockerfile
+        image: mpg123/ddrfuzz:latest

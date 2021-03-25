@@ -1,9 +1,11 @@
 FROM ubuntu:18.04
 LABEL maintainer="Sanghoon(Kevin) Jeon <kppw99@gmail.com>"
 
+
+# Install Prereqisite Utils
 RUN apt-get update --fix-missing
 RUN apt-get install -y apt-utils git wget make vim cmake gnupg gcc-multilib g++-multilib apt-transport-https tar
-#DEBIAN_FRONTEND=noninteractive apt-get -y install dialog apt-utils git wget build-essential cmake gcc-multilib g++-multilib gnupg zip autoconf automake libtool docbook2x zlib1g-dev rapidjson-dev apt-transport-https ca-certificates apt-utils vim gnuplot
+
 
 # Install LLVM Development Package
 RUN echo "#LLVM Repository" >> /etc/apt/sources.list && \
@@ -17,16 +19,26 @@ RUN echo "#LLVM Repository" >> /etc/apt/sources.list && \
     ln -s /usr/bin/clang-6.0 /usr/bin/clang && \
     ln -s /usr/bin/clang++-6.0 /usr/bin/clang++
 
-# INSTALL AFL (2.52.b)
+
+# Install AFL (2.52.b)
 RUN mkdir -p tool && cd /tool && \
     wget http://lcamtuf.coredump.cx/afl/releases/afl-2.52b.tgz && \
     tar zxvf afl-2.52b.tgz && \
     cd /tool/afl-2.52b && \
     make
 
+
+# Download ddrfuzz
+WORKDIR /tool/
+RUN git clone https://github.com/kppw99/ddrfuzz.git
+
+
+# Set Environment Variables
 ENV PATH=$PATH:/tool/afl-2.52b
 ENV AFL_PATH=/tool/afl-2.52b
 
 RUN echo "alias q='cd ..'" >> ~/.bashrc
 RUN echo "alias qq='cd ../..'" >> ~/.bashrc
 RUN echo "alias qqq='cd ../../..'" >> ~/.bashrc
+
+# docker build -t base/ddrfuzz:latest . -f Dockerfile
