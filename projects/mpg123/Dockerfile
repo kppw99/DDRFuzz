@@ -1,8 +1,8 @@
-FROM base:ddrfuzz
+FROM base/ddrfuzz:latest
 MAINTAINER "Sanghoon(Kevin) Jeon <kppw99@gmail.com>"
 
 
-# Set Environment
+# Set Environment Variables
 ENV CC=afl-gcc
 ENV C++=afl-g++
 
@@ -25,8 +25,12 @@ RUN make
 
 
 # Copy Seed Corpus and Fuzzing Executables
-COPY ./seed /targets/mpg123/seed/org
+RUN cp -rf /tool/ddrfuzz/projects/mpg123/seed/* /targets/mpg123/seed/org/
 RUN cp -rf /targets/mpg123/source/build/src/mpg123 /targets/mpg123/bin/
 
-COPY ./afl-fuzz.sh ./opt-seed.sh /targets/mpg123/
+RUN cp -rf /tool/ddrfuzz/projects/mpg123/afl-fuzz.sh /targets/mpg123/
+RUN cp -rf /tool/ddrfuzz/projects/mpg123/opt-seed.sh /targets/mpg123/
+
 WORKDIR /targets/mpg123/
+
+# docker build -t mpg123/ddrfuzz:latest . -f Dockerfile
