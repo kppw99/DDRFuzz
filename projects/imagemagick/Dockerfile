@@ -17,8 +17,7 @@ WORKDIR ${home}/seed/copt/
 WORKDIR ${home}/seed/topt/
 WORKDIR ${home}/bin/
 WORKDIR ${home}
-RUN git clone --depth 1 https://github.com/imagemagick/imagemagick
-RUN mv imagemagick source
+RUN git clone --depth 1 https://github.com/imagemagick/imagemagick source
 
 
 # Build Target Program
