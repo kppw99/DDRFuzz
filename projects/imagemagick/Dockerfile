@@ -1,38 +1,37 @@
-# Copyright 2017 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-################################################################################
+FROM base/ddrfuzz:latest
+MAINTAINER "Sanghoon(Kevin) Jeon <kppw99@gmail.com>"
 
-FROM gcr.io/oss-fuzz-base/base-builder
-RUN apt-get update && \
-    apt-get install -y make autoconf automake groff libtool pkg-config cmake nasm autopoint po4a libc6:i386 libc6-dev:i386
+
+# Set Environment Variables
+ENV CC=afl-gcc
+ENV C++=afl-g++
+ARG home=/targets/imagemagick
+ARG pro_home=/tool/ddrfuzz/projects/imagemagick
+
+
+# Prerequisite
+WORKDIR ${home}/seed/org/
+WORKDIR ${home}/seed/copt/
+WORKDIR ${home}/seed/topt/
+WORKDIR ${home}/bin/
+WORKDIR ${home}
 RUN git clone --depth 1 https://github.com/imagemagick/imagemagick
-RUN git clone --depth 1 https://gitlab.com/libtiff/libtiff
-RUN git clone --depth 1 https://github.com/strukturag/libde265
-RUN git clone --depth 1 https://github.com/strukturag/libheif
-RUN git clone --depth 1 https://github.com/uclouvain/openjpeg
-RUN git clone --depth 1 https://github.com/webmproject/libwebp
-RUN git clone --depth 1 https://github.com/madler/zlib
-RUN git clone --depth 1 https://github.com/libjpeg-turbo/libjpeg-turbo
-RUN git clone https://git.savannah.nongnu.org/r/freetype/freetype2.git/
-RUN git clone --depth 1 https://github.com/xz-mirror/xz
-RUN git clone --depth 1 https://github.com/libraw/libraw
-RUN git clone --depth 1 https://github.com/pnggroup/libpng
-RUN git clone --depth 1 https://github.com/mm2/Little-CMS
-RUN git clone https://www.cl.cam.ac.uk/~mgk25/git/jbigkit # does not support shallow
-RUN svn export https://github.com/mozillasecurity/fuzzdata.git/trunk/samples/heic heic_corpus
-RUN git clone --depth 1 https://gitlab.com/federicomenaquintero/bzip2.git
-ADD https://lcamtuf.coredump.cx/afl/demo/afl_testcases.tgz afl_testcases.tgz
-WORKDIR imagemagick
-COPY build.sh $SRC/
+RUN mv imagemagick source
+
+
+# Build Target Program
+WORKDIR ${home}/source/
+RUN ./configure --with-bzlib=no --with-djvu=no --with-dps=no --with-fftw=no --with-fpx=no --with-fontconfig=no --with-freetype=no --with-gvc=no --with-jbig=no --with-jpeg=no --with-lcms=no --with-lqr=no --with-lzma=no --with-openexr=no --with-openjp2=no --with-pango=no --with-png=no --with-tiff=no --with-raqm=no --with-webp=no --with-wmf=no --with-x=no --with-xml=no --with-zlib=no --enable-hdri=no --enable-shared=no
+RUN make
+
+
+# Copy Seed Corpus and Fuzzing Executables
+RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
+#RUN cp -rf /targets/mpg123/source/build/src/mpg123 /targets/mpg123/bin/
+
+#RUN cp -rf /tool/ddrfuzz/projects/mpg123/afl-fuzz.sh /targets/mpg123/
+#RUN cp -rf /tool/ddrfuzz/projects/mpg123/opt-seed.sh /targets/mpg123/
+
+WORKDIR ${home}
+
+# docker build -t imagemagick/ddrfuzz:latest . -f Dockerfile
