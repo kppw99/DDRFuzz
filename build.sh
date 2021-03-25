@@ -14,5 +14,5 @@ else
 	build "$@"
 fi
 
-# ./build.sh mpg123
+# ./build.sh [project name]
 

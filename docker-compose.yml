@@ -12,3 +12,9 @@ services:
             context: .
             dockerfile: ./projects/mpg123/Dockerfile
         image: mpg123/ddrfuzz:latest
+
+    imagemagick:
+        build:
+            context: .
+            dockerfile: ./projects/imagemagick/Dockerfile
+        image: imagemagick/ddrfuzz:latest
