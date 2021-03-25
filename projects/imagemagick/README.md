@@ -1,11 +1,11 @@
-## How to build mpg123
+## How to build ImageMagick
 - *Prerequisite: preparation for the base/ddrfuzz:latest container*
 ```
 # Build Dockerfile
-$ docker build -t mpg123/ddrfuzz:latest . -f Dockerfile
+$ docker build -t imagemagick/ddrfuzz:latest . -f Dockerfile
 
 # Execute Container
-$ docker run -it --privileged mpg123/ddrfuzz:latest /bin/bash
+$ docker run -it --privileged imagemagick/ddrfuzz:latest /bin/bash
 
 # Optimize Seed (Optional)
 $ ./opt-seed.sh

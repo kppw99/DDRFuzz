@@ -1,9 +1,9 @@
 #!/bin/bash
 
-home=/targets/mpg123
+home=/targets/imagemagick
 seed_home=$home/seed
-bin=$home/bin/mpg123
-opt='-m 100 -t 1000'
+bin=$home/bin/magick
+opt='-m 100 -t 10000+'
 
 origin_dir=$seed_home/org
 copt_dir=$seed_home/copt
@@ -29,4 +29,4 @@ fi
 
 output=$home/output
 rm -rf $output
-afl-fuzz $opt -i $input -o $output -- $bin -w /dev/null @@ 
+afl-fuzz $opt -i $input -o $output -- $bin @@ /dev/null

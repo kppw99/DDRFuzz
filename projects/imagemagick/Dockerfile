@@ -10,6 +10,8 @@ ARG pro_home=/tool/ddrfuzz/projects/imagemagick
 
 
 # Prerequisite
+WORKDIR /tool/ddrfuzz/
+RUN git pull origin main
 WORKDIR ${home}/seed/org/
 WORKDIR ${home}/seed/copt/
 WORKDIR ${home}/seed/topt/
@@ -27,10 +29,10 @@ RUN make
 
 # Copy Seed Corpus and Fuzzing Executables
 RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
-#RUN cp -rf /targets/mpg123/source/build/src/mpg123 /targets/mpg123/bin/
+RUN cp -rf ${home}/source/utilities/magick ${home}/bin/
 
-#RUN cp -rf /tool/ddrfuzz/projects/mpg123/afl-fuzz.sh /targets/mpg123/
-#RUN cp -rf /tool/ddrfuzz/projects/mpg123/opt-seed.sh /targets/mpg123/
+RUN cp -rf ${pro_home}/afl-fuzz.sh ${home}
+RUN cp -rf ${pro_home}/opt-seed.sh ${home}
 
 WORKDIR ${home}
 
