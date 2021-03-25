@@ -1,5 +1,5 @@
-### How to build mpg123
-*Prerequisite: preparation for the base:ddrfuzz container*
+## How to build mpg123
+- *Prerequisite: preparation for the base:ddrfuzz container*
 ```
 # Build Dockerfile
 $ docker build -t mpg123:ddrfuzz . -f Dockerfile
