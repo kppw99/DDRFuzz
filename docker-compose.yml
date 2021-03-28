@@ -5,16 +5,22 @@ services:
         build:
             context: .
             dockerfile: ./Dockerfile
-        image: base/ddrfuzz:latest
+        image: ddrfuzz/base:latest
 
     mpg123:
         build:
             context: .
             dockerfile: ./projects/mpg123/Dockerfile
-        image: mpg123/ddrfuzz:latest
+        image: ddrfuzz/mpg123:latest
 
     imagemagick:
         build:
             context: .
             dockerfile: ./projects/imagemagick/Dockerfile
-        image: imagemagick/ddrfuzz:latest
+        image: ddrfuzz/imagemagick:latest
+
+    mp4parse-rust:
+        build:
+            context: .
+            dockerfile: ./projects/mp4parse-rust/Dockerfile
+        image: ddrfuzz/mp4parse-rust:latest

@@ -1,4 +1,4 @@
-FROM i386/ubuntu:18.04
+FROM ubuntu:18.04
 LABEL maintainer="Sanghoon(Kevin) Jeon <kppw99@gmail.com>"
 
 
@@ -24,6 +24,7 @@ RUN echo "#LLVM Repository" >> /etc/apt/sources.list && \
 RUN mkdir -p tool && cd /tool && \
     wget http://lcamtuf.coredump.cx/afl/releases/afl-2.52b.tgz && \
     tar zxvf afl-2.52b.tgz && \
+    rm afl-2.52b.tgz && \
     cd /tool/afl-2.52b && \
     make
 
