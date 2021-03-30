@@ -1,40 +1,37 @@
-# Copyright 2016 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-################################################################################
+FROM base/ddrfuzz:latest
+MAINTAINER "Sanghoon(Kevin) Jeon <kppw99@gmail.com>"
 
-FROM gcr.io/oss-fuzz-base/base-builder
-ADD bionic.list /etc/apt/sources.list.d/bionic.list
-ADD nasm_apt.pin /etc/apt/preferences
-RUN apt-get update && apt-get install -y make autoconf automake libtool build-essential \
-    libass-dev libfreetype6-dev libsdl1.2-dev \
-    libvdpau-dev libxcb1-dev libxcb-shm0-dev \
-    pkg-config texinfo libbz2-dev zlib1g-dev yasm cmake mercurial wget \
-    xutils-dev libpciaccess-dev nasm rsync
 
-RUN git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
+# Set Environment Variables
+ENV CC=afl-gcc
+ENV CXX=afl-g++
+ARG home=/targets/ffmpeg
+ARG pro_home=/tool/ddrfuzz/projects/ffmpeg
 
-RUN wget https://www.alsa-project.org/files/pub/lib/alsa-lib-1.1.0.tar.bz2
-RUN git clone --depth 1 https://github.com/mstorsjo/fdk-aac.git
-RUN git clone --depth 1 git://anongit.freedesktop.org/xorg/lib/libXext
-RUN git clone --depth 1 git://anongit.freedesktop.org/git/xorg/lib/libXfixes
-RUN git clone --depth 1 https://github.com/intel/libva
-RUN git clone --depth 1 -b libvdpau-1.2 git://people.freedesktop.org/~aplattner/libvdpau
-RUN git clone --depth 1 https://chromium.googlesource.com/webm/libvpx
-RUN git clone --depth 1 https://gitlab.xiph.org/xiph/ogg.git
-RUN git clone --depth 1 https://gitlab.xiph.org/xiph/opus.git
-RUN git clone --depth 1 https://gitlab.xiph.org/xiph/theora.git
-RUN git clone --depth 1 https://gitlab.xiph.org/xiph/vorbis.git
 
-COPY build.sh group_seed_corpus.py $SRC/
+# Prerequisite
+WORKDIR ${home}/seed/org/
+WORKDIR ${home}/seed/copt/
+WORKDIR ${home}/seed/topt/
+WORKDIR ${home}/bin/
+WORKDIR ${home}
+RUN git clone --depth 1 https://github.com/FFmpeg/FFmpeg.git source
+
+
+# Build Target Program
+WORKDIR ${home}/source/
+RUN apt-get -y install yasm libass-dev libmp3lame-dev libopus-dev libvorbis-dev libx264-dev libx265-dev libnuma-dev
+RUN ./configure --prefix="$HOME/ffmpeg_build" --pkg-config="pkg-config --static" --extra-cflags="-I$HOME/ffmpeg_build/include" --extra-ldflags="-L$HOME/ffmpeg_build/lib" --extra-libs="-lpthread -lm" --bindir="$HOME/bin" --enable-gpl --enable-libass --enable-libfreetype --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libx264 --enable-libx265 --enable-nonfree --extra-cflags="-I$HOME/ffmpeg_build/include -O1 -fno-omit-frame-pointer -g" --extra-cxxflags="-O1 -fno-omit-frame-pointer -g" --extra-ldflags="-L$HOME/ffmpeg_build/include -fsanitize=address -fsanitize=undefined -lubsan" --enable-debug --cc=afl-gcc --cxx=afl-g++
+RUN make -j8
+
+
+# Copy Seed Corpus and Fuzzing Executables
+RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
+RUN cp -rf ${home}/source/ffmpeg ${home}/bin/
+
+RUN cp -rf ${pro_home}/afl-fuzz.sh ${home}
+RUN cp -rf ${pro_home}/opt-seed.sh ${home}
+
+WORKDIR ${home}
+
+# docker build -t ffmpeg/ddrfuzz:latest . -f Dockerfile
