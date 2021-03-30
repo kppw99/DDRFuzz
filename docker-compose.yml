@@ -21,6 +21,15 @@ services:
 
     mp4parse-rust:
         build:
-            context: .
-            dockerfile: ./projects/mp4parse-rust/Dockerfile
+            context: ./projects/mp4parse-rust
         image: ddrfuzz/mp4parse-rust:latest
+
+    libavif:
+        build:
+            context: ./projects/libavif
+        image: ddrfuzz/libavif:latest
+
+    libavc:
+        build:
+            context: ./projects/libavc
+        image: ddrfuzz/libavc:latest

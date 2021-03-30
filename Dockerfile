@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM i386/ubuntu:18.04
 LABEL maintainer="Sanghoon(Kevin) Jeon <kppw99@gmail.com>"
 
 
