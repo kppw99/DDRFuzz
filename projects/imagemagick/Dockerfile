@@ -4,7 +4,7 @@ MAINTAINER "Sanghoon(Kevin) Jeon <kppw99@gmail.com>"
 
 # Set Environment Variables
 ENV CC=afl-gcc
-ENV C++=afl-g++
+ENV CXX=afl-g++
 ARG home=/targets/imagemagick
 ARG pro_home=/tool/ddrfuzz/projects/imagemagick
 
