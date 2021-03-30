@@ -18,3 +18,15 @@ services:
             context: .
             dockerfile: ./projects/imagemagick/Dockerfile
         image: imagemagick/ddrfuzz:latest
+
+    ffmpeg:
+        build:
+            context: .
+            dockerfile: ./projects/ffmpeg/Dockerfile
+        image: ffmpeg/ddrfuzz:latest
+
+    libtiff:
+        build:
+            context: .
+            dockerfile: ./projects/libtiff/Dockerfile
+        image: libtiff/ddrfuzz:latest
