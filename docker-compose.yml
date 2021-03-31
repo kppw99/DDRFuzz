@@ -33,3 +33,8 @@ services:
         build:
             context: ./projects/libavc
         image: ddrfuzz/libavc:latest
+
+    libjpeg-turbo:
+        build:
+            context: ./projects/libjpeg-turbo
+        image: ddrfuzz/libjpeg-turbo:latest
