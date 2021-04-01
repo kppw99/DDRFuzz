@@ -18,22 +18,24 @@ WORKDIR ${home}/seed/topt/
 WORKDIR ${home}/bin/
 WORKDIR ${home}
 RUN git clone --depth 1 https://github.com/madler/zlib.git
-RUN git clone --depth 1 https://github.com/glennrp/libpng.git
+RUN git clone --depth 1 https://github.com/glennrp/libpng.git source
 RUN apt-get install -y make autoconf automake libtool zlib1g-dev
 
 # Build Target Program
 WORKDIR ${home}/source/
 RUN ./configure CC=$CC CXX=$CXX && make -j
+WORKDIR ${home}/source/.libs
+RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/targets/libpng/source/.libs/libpng16.so.16
 
 
 # Copy Seed Corpus and Fuzzing Executables
-#RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
-#RUN cp -rf ${home}/source/build/mpeg2dec ${home}/bin/
+RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
+RUN cp -rf ${home}/source/.libs/pngtest ${home}/bin/
 
-#RUN cp -rf ${pro_home}/afl-fuzz.sh ${home}
-#RUN cp -rf ${pro_home}/opt-seed.sh ${home}
+RUN cp -rf ${pro_home}/afl-fuzz.sh ${home}
+RUN cp -rf ${pro_home}/opt-seed.sh ${home}
 
-#WORKDIR ${home}
+WORKDIR ${home}
 
 
 # docker build -t libmpeg2/ddrfuzz:latest . -f Dockerfile
