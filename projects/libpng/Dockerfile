@@ -37,4 +37,4 @@ RUN cp -rf ${pro_home}/opt-seed.sh ${home}
 WORKDIR ${home}
 
 
-# docker build -t libmpeg2/ddrfuzz:latest . -f Dockerfile
+# docker build -t libpng/ddrfuzz:latest . -f Dockerfile

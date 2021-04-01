@@ -1,8 +1,8 @@
 #!/bin/bash
 
-home=/targets/libpng
+home=/targets/libspng
 seed_home=$home/seed
-bin=$home/bin/pngtest
+bin=$home/bin/example
 opt='-m 100 -t 10000+'
 
 origin_dir=$seed_home/org
@@ -31,4 +31,4 @@ output=$home/output
 rm -rf $output
 
 echo core /proc/sys/kernel/core_pattern
-LD_PRELOAD=$LIBRARY_PATH afl-fuzz $opt -i $input -o $output -- $bin @@ /dev/null
+afl-fuzz $opt -i $input -o $output -- $bin @@ /dev/null

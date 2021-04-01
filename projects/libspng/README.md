@@ -5,7 +5,7 @@
 $ docker build -t libspng/ddrfuzz:latest . -f Dockerfile
 
 # Execute Container
-$ docker run -it --name libspng --privileged libpng/ddrfuzz:latest /bin/bash
+$ docker run -it --name libspng --privileged libspng/ddrfuzz:latest /bin/bash
 
 # Optimize Seed (Optional)
 $ ./opt-seed.sh

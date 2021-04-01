@@ -33,13 +33,13 @@ RUN mkdir build && cd build && CC=$CC CXX=$CXX cmake .. && make
 
 
 # Copy Seed Corpus and Fuzzing Executables
-#RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
-#RUN cp -rf ${home}/source/.libs/pngtest ${home}/bin/
+RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
+RUN cp -rf ${home}/source/build/example ${home}/bin/
 
-#RUN cp -rf ${pro_home}/afl-fuzz.sh ${home}
-#RUN cp -rf ${pro_home}/opt-seed.sh ${home}
+RUN cp -rf ${pro_home}/afl-fuzz.sh ${home}
+RUN cp -rf ${pro_home}/opt-seed.sh ${home}
 
 WORKDIR ${home}
 
 
-# docker build -t libmpeg2/ddrfuzz:latest . -f Dockerfile
+# docker build -t libspng/ddrfuzz:latest . -f Dockerfile
