@@ -1,6 +1,6 @@
 #!/bin/bash
 
-home=/targets/
+home=/targets/libmpeg2
 seed_home=$home/seed
 bin=$home/bin/mpeg2dec
 opt='-m 100 -t 10000+'
@@ -29,4 +29,6 @@ fi
 
 output=$home/output
 rm -rf $output
+
+echo core /proc/sys/kernel/core_pattern
 afl-fuzz $opt -i $input -o $output -- $bin @@ /dev/null

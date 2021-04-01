@@ -1,6 +1,6 @@
 #!/bin/bash
 
-home=/targets/libmpeg2
+home=/targets/
 seed_home=$home/seed
 bin=$home/bin/mpeg2dec
 opt='-m 100 -t 10000+'

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-home=/targets/libpng
+home=/targets
 seed_home=$home/seed
 bin=$home/bin/pngtest
 opt='-m 100 -t 10000+'
