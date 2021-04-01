@@ -1,6 +1,6 @@
 #!/bin/bash
 
-home=/targets
+home=/targets/libpng
 seed_home=$home/seed
 bin=$home/bin/pngtest
 opt='-m 100 -t 10000+'
@@ -12,7 +12,7 @@ topt_dir=$seed_home/topt
 if [ -z ${1} ] || [ ${1} == 'cmin' ]; then
 
 	rm -rf $copt_dir
-	afl-cmin $opt -i $origin_dir -o $copt_dir -- $bin @@ /dev/null
+	LD_PRELOAD=$LIBRARY_PATH afl-cmin $opt -i $origin_dir -o $copt_dir -- $bin @@ /dev/null
 
 	if [ -z $1 ]; then
 		for input in $copt_dir/*
@@ -21,7 +21,7 @@ if [ -z ${1} ] || [ ${1} == 'cmin' ]; then
 			output=$topt_dir/$filename
 
 			rm -rf $output
-			afl-tmin $opt -i $input -o $output -- $bin @@ /dev/null
+			LD_PRELOAD=$LIBRARY_PATH afl-tmin $opt -i $input -o $output -- $bin @@ /dev/null
 		done
 	fi
 elif [ $1 == 'tmin' ]; then
@@ -31,7 +31,7 @@ elif [ $1 == 'tmin' ]; then
 		output=$topt_dir/$filename
 
 		rm -rf $output
-		afl-tmin $opt -i $input -o $output -- $bin @@ /dev/null
+		LD_PRELOAD=$LIBRARY_PATH afl-tmin $opt -i $input -o $output -- $bin @@ /dev/null
 	done
 else
 	echo ''
