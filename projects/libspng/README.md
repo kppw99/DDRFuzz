@@ -1,11 +1,11 @@
-## How to build Libpng
+## How to build Libspng
 - *Prerequisite: preparation for the base/ddrfuzz:latest container*
 ```
 # Build Dockerfile
-$ docker build -t libpng/ddrfuzz:latest . -f Dockerfile
+$ docker build -t libspng/ddrfuzz:latest . -f Dockerfile
 
 # Execute Container
-$ docker run -it --name libpng --privileged libpng/ddrfuzz:latest /bin/bash
+$ docker run -it --name libspng --privileged libpng/ddrfuzz:latest /bin/bash
 
 # Optimize Seed (Optional)
 $ ./opt-seed.sh
