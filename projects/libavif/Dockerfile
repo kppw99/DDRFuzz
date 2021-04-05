@@ -1,4 +1,5 @@
 FROM ddrfuzz/base
+
 LABEL maintainer="onsoim <onsoim@gmail.com>"
 
 RUN apt-get update && \
@@ -24,7 +25,8 @@ WORKDIR /tool/libavif/build
 RUN CC=afl-clang CXX=afl-clang++ cmake -G Ninja -DAVIF_BUILD_EXAMPLES=on ..
 RUN ninja
 
-ADD ossfuzz/avif_decode_seed_corpus.zip .
-RUN unzip avif_decode_seed_corpus.zip -d input
+RUN git clone https://github.com/onsoim/SeeD4Fuzzing && \
+    cp -R SeeD4Fuzzing/avif/ input/ && \
+    rm -rf SeeD4Fuzzing
 
 # afl-fuzz -m 1024 -i input/ -o output/ ./avif_example_decode_file @@

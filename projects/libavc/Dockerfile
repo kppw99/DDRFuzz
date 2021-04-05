@@ -1,6 +1,6 @@
 FROM base/ddrfuzz:latest
-LABEL maintainer="onsoim <onsoim@gmail.com>"
 
+LABEL maintainer="onsoim <onsoim@gmail.com>"
 
 # Set Environment Variables
 ENV CC=afl-gcc
@@ -15,9 +15,9 @@ WORKDIR /tool/libavc/build
 RUN CC=afl-clang CXX=afl-clang++ cmake .. && \
     make
 
-RUN apt-get install -y zip && \
-    wget https://storage.googleapis.com/android_media/external/libavc/fuzzer/avc_dec_fuzzer_seed_corpus.zip && \
-    unzip avc_dec_fuzzer_seed_corpus.zip -d input
+RUN git clone https://github.com/onsoim/SeeD4Fuzzing && \
+    cp -R SeeD4Fuzzing/h264/ input/ && \
+    rm -rf SeeD4Fuzzing
 
 ## need to be run with permission
 # echo core >/proc/sys/kernel/core_pattern
