@@ -1,8 +1,0 @@
-digraph "" {
-one -> two
-two -> three
-three -> four
-four -> five
-five -> one
-one -> three
-}
