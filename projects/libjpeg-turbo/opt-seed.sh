@@ -1,9 +1,9 @@
 #!/bin/bash
 
-home=/targets/mpg123
+home=/targets/libjpeg-turbo
 seed_home=$home/seed
-bin=$home/bin/mpg123
-opt='-m 100 -t 1000'
+bin=$home/bin/cjpeg
+opt='-m 1000 -t 10000+'
 
 origin_dir=$seed_home/org
 copt_dir=$seed_home/copt
