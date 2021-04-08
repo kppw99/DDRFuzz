@@ -29,5 +29,5 @@ fi
 
 output=$home/output
 rm -rf $output
-echo core /proc/sys/kernel/core_pattern
+echo core >/proc/sys/kernel/core_pattern
 afl-fuzz $opt -i $input -o $output -- $bin -w /dev/null @@ 
