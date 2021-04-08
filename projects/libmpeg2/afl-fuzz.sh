@@ -31,4 +31,4 @@ output=$home/output
 rm -rf $output
 
 echo core >/proc/sys/kernel/core_pattern
-afl-fuzz $opt -i $input -o $output -- $bin @@ /dev/null
+afl-fuzz $opt -i $input -o $output -- $bin @@
