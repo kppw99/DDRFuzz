@@ -5,36 +5,48 @@ services:
         build:
             context: .
             dockerfile: ./Dockerfile
-        image: ddrfuzz/base:latest
+        image: base/ddrfuzz:latest
 
     mpg123:
         build:
             context: .
             dockerfile: ./projects/mpg123/Dockerfile
-        image: ddrfuzz/mpg123:latest
+        image: mpg123/ddrfuzz:latest
 
     imagemagick:
         build:
             context: .
             dockerfile: ./projects/imagemagick/Dockerfile
-        image: ddrfuzz/imagemagick:latest
+        image: imagemagick/ddrfuzz:latest
 
     mp4parse-rust:
         build:
             context: ./projects/mp4parse-rust
-        image: ddrfuzz/mp4parse-rust:latest
+        image: mp4parse-rust/ddrfuzz:latest
 
     libavif:
         build:
             context: ./projects/libavif
-        image: ddrfuzz/libavif:latest
+        image: libavif/ddrfuzz:latest
 
     libavc:
         build:
             context: ./projects/libavc
-        image: ddrfuzz/libavc:latest
+        image: libavc/ddrfuzz:latest
 
     libjpeg-turbo:
         build:
             context: ./projects/libjpeg-turbo
-        image: ddrfuzz/libjpeg-turbo:latest
+        image: libjpeg-turbo/ddrfuzz:latest
+
+    ffmpeg:
+        build:
+            context: .
+            dockerfile: ./projects/ffmpeg/Dockerfile
+        image: ffmpeg/ddrfuzz:latest
+
+    libtiff:
+        build:
+            context: .
+            dockerfile: ./projects/libtiff/Dockerfile
+        image: libtiff/ddrfuzz:latest

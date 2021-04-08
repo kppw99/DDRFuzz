@@ -4,7 +4,7 @@ MAINTAINER "Sanghoon(Kevin) Jeon <kppw99@gmail.com>"
 
 # Set Environment Variables
 ENV CC=afl-gcc
-ENV C++=afl-g++
+ENV CXX=afl-g++
 ARG home=/targets/mpg123
 ARG pro_home=/tool/ddrfuzz/projects/mpg123
 
@@ -17,6 +17,8 @@ WORKDIR ${home}/source/
 RUN wget https://www.mpg123.de/snapshot
 RUN tar -xvf snapshot --directory=${home}/source --strip-components=1
 RUN rm -rf snapshot
+WORKDIR /tool/ddrfuzz/
+RUN git pull origin main
 
 
 # Build Target Program
@@ -26,6 +28,9 @@ RUN make
 
 
 # Copy Seed Corpus and Fuzzing Executables
+WORKDIR ${pro_home}
+RUN tar -zxvf seed.tar.gz
+
 RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
 RUN cp -rf ${home}/source/build/src/mpg123 ${home}/bin/
 

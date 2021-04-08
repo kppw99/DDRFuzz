@@ -1,4 +1,4 @@
-FROM ddrfuzz/base:latest
+FROM base/ddrfuzz:latest
 
 LABEL maintainer="onsoim <onsoim@gmail.com>"
 
