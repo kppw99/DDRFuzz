@@ -15,9 +15,11 @@ WORKDIR /tool/libavc/build
 RUN CC=afl-clang CXX=afl-clang++ cmake .. && \
     make
 
+ARG TYPE=h264
+
 RUN git clone https://github.com/onsoim/SeeD4Fuzzing && \
     mkdir -p $seed/org && \
-    cp -R SeeD4Fuzzing/h264/* $seed/org/ && \
+    cp -R SeeD4Fuzzing/$TYPE/* $seed/org/ && \
     rm -rf SeeD4Fuzzing
 
 RUN mkdir -p $home/bin && \
