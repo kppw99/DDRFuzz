@@ -29,15 +29,14 @@ RUN make -j8
 
 
 # Copy Seed Corpus and Fuzzing Executables
-#RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
-COPY ./seed/* ${home}/seed/org/
+WORKDIR ${pro_home}
+RUN tar -zxvf seed.tar.gz
 
+RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
 RUN cp -rf ${home}/source/tools/bmp2tiff ${home}/bin/
 
-#RUN cp -rf ${pro_home}/afl-fuzz.sh ${home}
-#RUN cp -rf ${pro_home}/opt-seed.sh ${home}
-COPY ./afl-fuzz.sh ${home}
-COPY ./opt-seed.sh ${home}
+RUN cp -rf ${pro_home}/afl-fuzz.sh ${home}
+RUN cp -rf ${pro_home}/opt-seed.sh ${home}
 
 WORKDIR ${home}
 
