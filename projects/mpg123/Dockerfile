@@ -17,6 +17,8 @@ WORKDIR ${home}/source/
 RUN wget https://www.mpg123.de/snapshot
 RUN tar -xvf snapshot --directory=${home}/source --strip-components=1
 RUN rm -rf snapshot
+WORKDIR /tool/ddrfuzz/
+RUN git pull origin main
 
 
 # Build Target Program
