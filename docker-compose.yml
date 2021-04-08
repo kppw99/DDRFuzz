@@ -19,6 +19,26 @@ services:
             dockerfile: ./projects/imagemagick/Dockerfile
         image: imagemagick/ddrfuzz:latest
 
+    mp4parse-rust:
+        build:
+            context: ./projects/mp4parse-rust
+        image: mp4parse-rust/ddrfuzz:latest
+
+    libavif:
+        build:
+            context: ./projects/libavif
+        image: libavif/ddrfuzz:latest
+
+    libavc:
+        build:
+            context: ./projects/libavc
+        image: libavc/ddrfuzz:latest
+
+    libjpeg-turbo:
+        build:
+            context: ./projects/libjpeg-turbo
+        image: libjpeg-turbo/ddrfuzz:latest
+
     ffmpeg:
         build:
             context: .

@@ -24,6 +24,7 @@ RUN echo "#LLVM Repository" >> /etc/apt/sources.list && \
 RUN mkdir -p tool && cd /tool && \
     wget http://lcamtuf.coredump.cx/afl/releases/afl-2.52b.tgz && \
     tar zxvf afl-2.52b.tgz && \
+    rm afl-2.52b.tgz && \
     cd /tool/afl-2.52b && \
     make
 

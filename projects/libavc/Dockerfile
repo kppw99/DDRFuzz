@@ -1,22 +1,29 @@
-# Copyright 2019 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-################################################################################
+FROM base/ddrfuzz:latest
 
-FROM gcr.io/oss-fuzz-base/base-builder
-RUN apt-get update && apt-get install -y wget cmake
-RUN git clone https://android.googlesource.com/platform/external/libavc
-ADD https://storage.googleapis.com/android_media/external/libavc/fuzzer/avc_dec_fuzzer_seed_corpus.zip $SRC/
-COPY build.sh $SRC/
-WORKDIR libavc
+LABEL maintainer="onsoim <onsoim@gmail.com>"
+
+# Set Environment Variables
+ARG home=/targets/libavc
+ARG seed=${home}/seed
+
+RUN apt-get update && \
+    apt-get install -y wget cmake
+
+RUN git clone https://android.googlesource.com/platform/external/libavc && mkdir libavc/build
+
+WORKDIR /tool/libavc/build
+RUN CC=afl-clang CXX=afl-clang++ cmake .. && \
+    make
+
+ARG TYPE=h264
+
+RUN git clone https://github.com/onsoim/SeeD4Fuzzing && \
+    mkdir -p $seed/org && \
+    cp -R SeeD4Fuzzing/$TYPE/* $seed/org/ && \
+    rm -rf SeeD4Fuzzing
+
+RUN mkdir -p $home/bin && \
+    cp avcdec $home/bin/ && \
+    cp ../test/decoder/dec.cfg $home/bin/
+
+WORKDIR $home

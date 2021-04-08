@@ -1,4 +1,4 @@
-# Copyright 2019 Google Inc.
+# Copyright 2016 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,8 +15,12 @@
 ################################################################################
 
 FROM gcr.io/oss-fuzz-base/base-builder
-RUN apt-get update && apt-get install -y wget cmake
-RUN git clone https://android.googlesource.com/platform/external/libmpeg2
-ADD https://storage.googleapis.com/android_media/external/libmpeg2/fuzzer/mpeg2_dec_fuzzer_seed_corpus.zip $SRC/
-COPY build.sh $SRC/
-WORKDIR libmpeg2
+RUN apt-get update && apt-get install -y make autoconf automake libtool nasm curl cmake
+RUN git clone --depth 1 https://github.com/libjpeg-turbo/libjpeg-turbo
+
+RUN mkdir afl-testcases
+RUN cd afl-testcases/ && curl https://lcamtuf.coredump.cx/afl/demo/afl_testcases.tgz | tar -xz
+RUN zip libjpeg_turbo_fuzzer_seed_corpus.zip afl-testcases/jpeg/full/images/* afl-testcases/jpeg_turbo/full/images/* $SRC/libjpeg-turbo/testimages/*
+
+WORKDIR libjpeg-turbo
+COPY build.sh libjpeg_turbo_fuzzer.cc $SRC/
