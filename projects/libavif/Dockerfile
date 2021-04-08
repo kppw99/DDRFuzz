@@ -5,6 +5,7 @@ LABEL maintainer="onsoim <onsoim@gmail.com>"
 # Set Environment Variables
 ARG home=/targets/libavif
 ARG seed=${home}/seed
+ARG pro_home=/tool/ddrfuzz/projects/libavif
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y curl python3-pip python3-setuptools python3-wheel cmake git unzip && \
@@ -18,6 +19,9 @@ WORKDIR /tool/libavif/nasm-2.14
 RUN ./configure && make -j2 && ln -s `pwd`/nasm /usr/bin/nasm
 WORKDIR /tool/libavif
 RUN nasm --version
+
+WORKDIR /tool/ddrfuzz/
+RUN git pull origin main
 
 # build dav1d
 WORKDIR /tool/libavif/ext
@@ -36,6 +40,9 @@ RUN git clone https://github.com/onsoim/SeeD4Fuzzing && \
     mkdir -p $seed/org && \
     find SeeD4Fuzzing/$TYPE/ -size 1M -exec cp {} $seed/org/ \; && \
     rm -rf SeeD4Fuzzing
+
+RUN cp -rf ${pro_home}/afl-fuzz.sh ${home}
+RUN cp -rf ${pro_home}/opt-seed.sh ${home}
 
 RUN mkdir -p $home/bin && \
     cp avif_example_decode_file $home/bin/
