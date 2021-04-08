@@ -1,13 +1,13 @@
-FROM base/ddrfuzz:latest
+FROM ddrfuzz/base:latest
 
 LABEL maintainer="onsoim <onsoim@gmail.com>"
 
 # Set Environment Variables
-ENV CC=afl-gcc
-ENV C++=afl-g++
+ARG home=/targets/libavc
+ARG seed=${home}/seed
 
 RUN apt-get update && \
-    apt-get install -y wget cmake unzip
+    apt-get install -y wget cmake
 
 RUN git clone https://android.googlesource.com/platform/external/libavc && mkdir libavc/build
 
@@ -16,9 +16,12 @@ RUN CC=afl-clang CXX=afl-clang++ cmake .. && \
     make
 
 RUN git clone https://github.com/onsoim/SeeD4Fuzzing && \
-    cp -R SeeD4Fuzzing/h264/ input/ && \
+    mkdir -p $seed/org && \
+    cp -R SeeD4Fuzzing/h264/* $seed/org/ && \
     rm -rf SeeD4Fuzzing
 
-## need to be run with permission
-# echo core >/proc/sys/kernel/core_pattern
-# afl-fuzz -m 1024 -i input/h264/ -o output ./avcdec --input @@
+RUN mkdir -p $home/bin && \
+    cp avcdec $home/bin/ && \
+    cp ../test/decoder/dec.cfg $home/bin/
+
+WORKDIR $home
