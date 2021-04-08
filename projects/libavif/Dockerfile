@@ -2,6 +2,10 @@ FROM ddrfuzz/base
 
 LABEL maintainer="onsoim <onsoim@gmail.com>"
 
+# Set Environment Variables
+ARG home=/targets/libavif
+ARG seed=${home}/seed
+
 RUN apt-get update && \
     apt-get install --no-install-recommends -y curl python3-pip python3-setuptools python3-wheel cmake git unzip && \
     pip3 install meson ninja
@@ -25,8 +29,15 @@ WORKDIR /tool/libavif/build
 RUN CC=afl-clang CXX=afl-clang++ cmake -G Ninja -DAVIF_BUILD_EXAMPLES=on ..
 RUN ninja
 
+ARG TYPE=avif
+#     
+
 RUN git clone https://github.com/onsoim/SeeD4Fuzzing && \
-    cp -R SeeD4Fuzzing/avif/ input/ && \
+    mkdir -p $seed/org && \
+    find SeeD4Fuzzing/$TYPE/ -size 1M -exec cp {} $seed/org/ \; && \
     rm -rf SeeD4Fuzzing
 
-# afl-fuzz -m 1024 -i input/ -o output/ ./avif_example_decode_file @@
+RUN mkdir -p $home/bin && \
+    cp avif_example_decode_file $home/bin/
+
+WORKDIR $home
