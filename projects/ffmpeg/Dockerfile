@@ -10,6 +10,8 @@ ARG pro_home=/tool/ddrfuzz/projects/ffmpeg
 
 
 # Prerequisite
+WORKDIR /tool/ddrfuzz/
+RUN git pull origin main
 WORKDIR ${home}/seed/org/
 WORKDIR ${home}/seed/copt/
 WORKDIR ${home}/seed/topt/
@@ -26,6 +28,9 @@ RUN make -j8
 
 
 # Copy Seed Corpus and Fuzzing Executables
+WORKDIR ${pro_home}
+RUN tar -zxvf seed.tar.gz
+
 RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
 RUN cp -rf ${home}/source/ffmpeg ${home}/bin/
 
