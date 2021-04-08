@@ -19,6 +19,7 @@ services:
             dockerfile: ./projects/imagemagick/Dockerfile
         image: imagemagick/ddrfuzz:latest
 
+<<<<<<< HEAD
     mp4parse-rust:
         build:
             context: ./projects/mp4parse-rust
@@ -39,6 +40,8 @@ services:
             context: ./projects/libjpeg-turbo
         image: libjpeg-turbo/ddrfuzz:latest
 
+=======
+>>>>>>> upstream/main
     ffmpeg:
         build:
             context: .
