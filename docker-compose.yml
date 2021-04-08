@@ -19,11 +19,6 @@ services:
             dockerfile: ./projects/imagemagick/Dockerfile
         image: imagemagick/ddrfuzz:latest
 
-    mp4parse-rust:
-        build:
-            context: ./projects/mp4parse-rust
-        image: mp4parse-rust/ddrfuzz:latest
-
     libavif:
         build:
             context: ./projects/libavif
@@ -50,3 +45,21 @@ services:
             context: .
             dockerfile: ./projects/libtiff/Dockerfile
         image: libtiff/ddrfuzz:latest
+
+    libpng:
+        build:
+            context: .
+            dockerfile: ./projects/libpng/Dockerfile
+        image: libpng/ddrfuzz:latest
+
+    libmpeg2:
+        build:
+            context: .
+            dockerfile: ./projects/libmpeg2/Dockerfile
+        image: libmpeg2/ddrfuzz:latest
+
+    libspng:
+        build:
+            context: .
+            dockerfile: ./projects/libspng/Dockerfile
+        image: libspng/ddrfuzz:latest
