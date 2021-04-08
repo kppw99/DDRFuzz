@@ -26,6 +26,9 @@ RUN make
 
 
 # Copy Seed Corpus and Fuzzing Executables
+WORKDIR ${pro_home}
+RUN tar -zxvf seed.tar.gz
+
 RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
 RUN cp -rf ${home}/source/build/src/mpg123 ${home}/bin/
 
