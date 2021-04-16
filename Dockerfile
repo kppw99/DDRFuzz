@@ -22,10 +22,8 @@ RUN echo "#LLVM Repository" >> /etc/apt/sources.list && \
 
 # Install AFL (2.52.b)
 RUN mkdir -p tool && cd /tool && \
-    wget http://lcamtuf.coredump.cx/afl/releases/afl-2.52b.tgz && \
-    tar zxvf afl-2.52b.tgz && \
-    rm afl-2.52b.tgz && \
-    cd /tool/afl-2.52b && \
+    git clone https://github.com/onsoim/afl4ddrfuzz && \
+    cd /tool/afl4ddrfuzz && \
     make
 
 
@@ -35,8 +33,8 @@ RUN git clone https://github.com/kppw99/ddrfuzz.git
 
 
 # Set Environment Variables
-ENV PATH=$PATH:/tool/afl-2.52b
-ENV AFL_PATH=/tool/afl-2.52b
+ENV PATH=$PATH:/tool/afl4ddrfuzz
+ENV AFL_PATH=/tool/afl4ddrfuzz
 
 RUN echo "alias q='cd ..'" >> ~/.bashrc
 RUN echo "alias qq='cd ../..'" >> ~/.bashrc
