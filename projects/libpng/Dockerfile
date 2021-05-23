@@ -23,8 +23,10 @@ RUN apt-get install -y make autoconf automake libtool zlib1g-dev
 
 # Build Target Program
 WORKDIR ${home}/source/
-RUN ./configure CC=$CC CXX=$CXX && make -j
+RUN cp -rf ${pro_home}/build_new.sh ${home}/source/
 ENV LIBRARY_PATH=/targets/libpng/source/.libs/libpng16.so.16
+RUN bash build_new.sh
+#RUN ./configure CC=$CC CXX=$CXX && make -j
 
 
 # Copy Seed Corpus and Fuzzing Executables
