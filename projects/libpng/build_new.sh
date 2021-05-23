@@ -17,7 +17,7 @@ OUT=.
 SRC=.
 
 make clean
-./configure CC=$CC CXX$CXX CFALGS=$CFLAGS CXXFALGS=$CXXCFLAGS LDFLAGS=$LDFLAGS
+CC=$CC CXX=$CXX CFALGS=$CFLAGS CXXFALGS=$CXXCFLAGS LDFLAGS=$LDFLAGS ./configure
 
 if [[ "$#" -ge "1" && ( $1 == "cov" ) ]];
 then
