@@ -19,12 +19,4 @@ make clean
 CC=$CC CXX=$CXX CFALGS=$CFLAGS CXXFALGS=$CXXCFLAGS ./configure
 #CC=$CC CXX=$CXX ./configure
 
-if [[ "$#" -ge "1" && ( $1 == "cov" ) ]];
-then
-	make -j
-	#make check
-else
-	AFL_USE_ASAN=1 make -j
-	#ASAN_OPTIONS=detect_leaks=0 AFL_USE_ASAN=1 make check
-fi
-
+make -j
