@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import argparse
 from util import *
 from models import *
