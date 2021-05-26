@@ -15,9 +15,10 @@ RUN git clone https://android.googlesource.com/platform/external/libavc && mkdir
 WORKDIR /tool/ddrfuzz/
 RUN git pull origin main
 
-WORKDIR /tool/libavc/build
-RUN CC=afl-clang CXX=afl-clang++ cmake .. && \
-    make
+WORKDIR /tool/libavc/
+RUN cp -rf ${pro_home}/build_new.sh .
+RUN bash build_new.sh
+#RUN CC=afl-clang CXX=afl-clang++ cmake .. && make
 
 ARG TYPE=h264
 
