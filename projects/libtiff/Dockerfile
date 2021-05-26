@@ -22,10 +22,12 @@ RUN git clone --depth 1 https://github.com/vadz/libtiff.git source
 
 # Build Target Program
 WORKDIR ${home}/source/
+RUN cp -rf ${pro_home}/build_new.sh ${home}/source/
 RUN apt-get -y install m4 autoconf libtool zlib1g-dev liblzma-dev
-RUN ./autogen.sh
-RUN ./configure --disable-shared
-RUN make -j8
+RUN bash build_new.sh
+#RUN ./autogen.sh
+#RUN ./configure --disable-shared
+#RUN make -j8
 
 
 # Copy Seed Corpus and Fuzzing Executables
