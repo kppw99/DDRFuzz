@@ -28,10 +28,15 @@ WORKDIR /tool/libavif/ext
 RUN bash dav1d.cmd
 
 # build libavif
-RUN mkdir build
+WORKDIR /tool/libavif
+RUN cp -rf ${pro_home}/build_new.sh .
+RUN bash build_new.sh
 WORKDIR /tool/libavif/build
-RUN CC=afl-clang CXX=afl-clang++ cmake -G Ninja -DAVIF_BUILD_EXAMPLES=on ..
-RUN ninja
+
+#RUN mkdir build
+#WORKDIR /tool/libavif/build
+#RUN CC=afl-clang CXX=afl-clang++ cmake -G Ninja -DAVIF_BUILD_EXAMPLES=on ..
+#RUN ninja
 
 ARG TYPE=avif
 #     
