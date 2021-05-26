@@ -19,6 +19,7 @@ WORKDIR /tool/libavc/
 RUN cp -rf ${pro_home}/build_new.sh .
 RUN bash build_new.sh
 #RUN CC=afl-clang CXX=afl-clang++ cmake .. && make
+WORKDIR /tool/libavc/build
 
 ARG TYPE=h264
 

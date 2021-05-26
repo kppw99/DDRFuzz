@@ -16,8 +16,12 @@ RUN git clone --depth 1 https://github.com/libjpeg-turbo/libjpeg-turbo && \
 WORKDIR /tool/ddrfuzz/
 RUN git pull origin main
 
+WORKDIR /tool/libjpeg-turbo
+RUN cp -rf ${pro_home}/build_new.sh .
+RUN bash build_new.sh
 WORKDIR /tool/libjpeg-turbo/build/
-RUN CC=afl-clang CXX=afl-clang++ cmake ../ && make "-j$(nproc)"
+
+#RUN CC=afl-clang CXX=afl-clang++ cmake ../ && make "-j$(nproc)"
 
 ARG TYPE=bmp
 
