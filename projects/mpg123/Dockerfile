@@ -23,7 +23,7 @@ RUN git pull origin main
 
 # Build Target Program
 WORKDIR ${home}/source/build/
-RUN cp -rf {pro_home}/build_new.sh ${home}/source/
+RUN cp -rf ${pro_home}/build_new.sh .
 RUN bash build_new.sh
 
 #RUN CFLAGS="-Os -s" ../configure --with-cpu=generic  --disable-id3v2 --disable-lfs-alias --disable-feature-report --with-seektable=0 --disable-16bit --disable-32bit --disable-8bit --disable-messages --disable-feeder --disable-ntom --disable-downsample --disable-icy --disable-shared
