@@ -29,7 +29,9 @@ RUN mv zlib-1.2.11 zlib
 WORKDIR ${home}/zlib/
 RUN mkdir build && cd build && cmake .. && make -j && make install
 WORKDIR ${home}/source/
-RUN mkdir build && cd build && CC=$CC CXX=$CXX cmake .. && make
+RUN cp -rf ${pro_home}/build_new.sh ${home}/source/
+#RUN mkdir build && cd build && CC=$CC CXX=$CXX cmake .. && make
+RUN bash build_new.sh
 
 
 # Copy Seed Corpus and Fuzzing Executables
