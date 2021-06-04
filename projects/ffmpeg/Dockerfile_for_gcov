@@ -24,7 +24,10 @@ RUN git clone --depth 1 https://github.com/FFmpeg/FFmpeg.git source
 WORKDIR ${home}/source/
 RUN apt-get -y install yasm libass-dev libmp3lame-dev libopus-dev libvorbis-dev libx264-dev libx265-dev libnuma-dev
 RUN cp -rf ${pro_home}/build_new.sh .
-RUN bash build_new.sh
+RUN bash build_new.sh cov
+
+#RUN ./configure --prefix="$HOME/ffmpeg_build" --pkg-config="pkg-config --static" --extra-cflags="-I$HOME/ffmpeg_build/include" --extra-ldflags="-L$HOME/ffmpeg_build/lib" --extra-libs="-lpthread -lm" --bindir="$HOME/bin" --enable-gpl --enable-libass --enable-libfreetype --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libx264 --enable-libx265 --enable-nonfree --extra-cflags="-I$HOME/ffmpeg_build/include -O1 -fno-omit-frame-pointer -g" --extra-cxxflags="-O1 -fno-omit-frame-pointer -g" --extra-ldflags="-L$HOME/ffmpeg_build/include -fsanitize=address -fsanitize=undefined -lubsan" --enable-debug --cc=afl-gcc --cxx=afl-g++
+#RUN make -j8
 
 
 # Copy Seed Corpus and Fuzzing Executables
