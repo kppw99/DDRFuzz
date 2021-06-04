@@ -1,20 +1,19 @@
 #!/bin/bash
 
+CC="/tool/afl4ddrfuzz/afl-clang"
+CXX="/tool/afl4ddrfuzz/afl-clang++"
+
+make distclean
+make clean
+
 if [[ "$#" -ge "1" && $1 == "cov" ]];
 then
-	CC="/tool/afl4ddrfuzz/afl-gcc -fprofile-arcs -ftest-coverage"
-	CXX="/tool/afl4ddrfuzz/afl-g++ -fprofile-arcs -ftest-coverage"
+
+	./configure --enable-cross-compile --toolchain=gcov --prefix="$HOME/ffmpeg_build" --pkg-config="pkg-config --static" --extra-cflags="-I$HOME/ffmpeg_build/include" --extra-ldflags="-L$HOME/ffmpeg_build/lib" --extra-libs="-lpthread -lm" --bindir="$HOME/bin" --enable-gpl --enable-libass --enable-libfreetype --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libx264 --enable-libx265 --enable-nonfree  --extra-cflags="-I$HOME/ffmpeg_build/include -O1 -fno-omit-frame-pointer -g" --extra-cxxflags="-O1 -fno-omit-frame-pointer -g" --extra-ldflags="-L$HOME/ffmpeg_build/include -lubsan" --enable-debug --cc=$CC --cxx=$CXX
 
 else
-	CC="/tool/afl4ddrfuzz/afl-gcc"
-	CXX="/tool/afl4ddrfuzz/afl-g++"
+	./configure --enable-cross-compile --prefix="$HOME/ffmpeg_build" --pkg-config="pkg-config --static" --extra-cflags="-I$HOME/ffmpeg_build/include" --extra-ldflags="-L$HOME/ffmpeg_build/lib" --extra-libs="-lpthread -lm" --bindir="$HOME/bin" --enable-gpl --enable-libass --enable-libfreetype --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libx264 --enable-libx265 --enable-nonfree  --extra-cflags="-I$HOME/ffmpeg_build/include -O1 -fno-omit-frame-pointer -g" --extra-cxxflags="-O1 -fno-omit-frame-pointer -g" --extra-ldflags="-L$HOME/ffmpeg_build/include -lubsan" --enable-debug --cc=$CC --cxx=$CXX
+
 fi
 
-nproc=1
-OUT=.
-SRC=.
-
-make clean
-./autogen.sh
-CC=$CC CXX=$CXX ./configure --disable-shared
-make -j8
+make -j
