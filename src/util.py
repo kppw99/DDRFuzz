@@ -1,5 +1,8 @@
+#!/usr/bin/python3
+
 import os
 import base64
+import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.sequence import pad_sequences
@@ -62,8 +65,21 @@ def get_output_files(dir_path):
     return [x for x in sorted(files) if '_prev' not in x]
 
 
-def zero_padding(input_data, padding='post', maxlen=None):
-    return pad_sequences(input_data, maxlen=maxlen, padding=padding)
+def zero_padding(input_data, maxlen=None, tag=0):
+    data_list = list()
+    for data in input_data:
+        if len(data) < maxlen:
+            data = np.pad(data, (0, maxlen - len(data)))
+            if tag == 1:
+                idx = list(data).index(0)
+                data[idx] = BASE64_DICT['!']
+        else:
+            data = np.array(data[:maxlen])
+            if tag == 1:
+                data[-1] = BASE64_DICT['!']
+        data_list.append(data)
+
+    return np.array(data_list)
 
 
 def load_dataset(path, pad_maxlen=None):
@@ -76,18 +92,26 @@ def load_dataset(path, pad_maxlen=None):
         output_seeds.append(binary_to_vector(out_file, tag=1))
 
     input_seeds = zero_padding(input_seeds, maxlen=pad_maxlen)
-    output_seeds = zero_padding(output_seeds, maxlen=pad_maxlen)
+    output_seeds = zero_padding(output_seeds, maxlen=pad_maxlen, tag=1)
 
     return input_seeds, output_seeds
 
 
 def split_tensor(input_tensor, target_tensor, batch_size=64, test_ratio=0.2, algo=None):
-    tr_X, te_X, tr_y, te_y = train_test_split(input_tensor, target_tensor, test_size=test_ratio)
+    if test_ratio != 0.0:
+        tr_X, te_X, tr_y, te_y = train_test_split(input_tensor, target_tensor, test_size=test_ratio)
+    else:
+        tr_X = input_tensor
+        tr_y = target_tensor
+        
     buffer_size = len(tr_X)
 
     if algo is None:
         train_ds = tf.data.Dataset.from_tensor_slices((tr_X, tr_y)).shuffle(buffer_size).batch(batch_size).prefetch(1024)
-        test_ds = tf.data.Dataset.from_tensor_slices((te_X, te_y)).batch(1).prefetch(1024)
+        if test_ratio != 0.0:
+            test_ds = tf.data.Dataset.from_tensor_slices((te_X, te_y)).batch(1).prefetch(1024)
+        else:
+            test_ds = tf.data.Dataset.from_tensor_slices((tr_X, tr_y)).batch(1).prefetch(1024)
     elif algo == 'transformer':
         train_ds = tf.data.Dataset.from_tensor_slices((
             {
@@ -98,22 +122,31 @@ def split_tensor(input_tensor, target_tensor, batch_size=64, test_ratio=0.2, alg
                 'outputs': tr_y[:, 1:]
             },
         ))
-
-        test_ds = tf.data.Dataset.from_tensor_slices((
-            {
-                'inputs': te_X,
-                'dec_inputs': te_y[:, :-1]
-            },
-            {
-                'outputs': te_y[:, 1:]
-            },
-        ))
-
         train_ds = train_ds.cache()
         train_ds = train_ds.shuffle(buffer_size)
         train_ds = train_ds.batch(batch_size)
         train_ds = train_ds.prefetch(tf.data.experimental.AUTOTUNE)
 
+        if test_ratio != 0.0:
+            test_ds = tf.data.Dataset.from_tensor_slices((
+                {
+                    'inputs': te_X,
+                    'dec_inputs': te_y[:, :-1]
+                },
+                {
+                    'outputs': te_y[:, 1:]
+                },
+            ))
+        else:
+            test_ds = tf.data.Dataset.from_tensor_slices((
+                {
+                    'inputs': tr_X,
+                    'dec_inputs': tr_y[:, :-1]
+                },
+                {
+                    'outputs': tr_y[:, 1:]
+                },
+            ))
         test_ds = test_ds.cache()
         test_ds = test_ds.batch(1)
         test_ds = test_ds.prefetch(tf.data.experimental.AUTOTUNE)
@@ -128,8 +161,8 @@ if __name__=='__main__':
     MAXLEN = 500
     BATCH_SIZE = 64
 
-    input_tensor, target_tensor = load_dataset('../seq2seq/data', pad_maxlen=MAXLEN)
-    train_ds, target_ds = split_tensor(input_tensor, target_tensor, batch_size=BATCH_SIZE)
+    input_tensor, target_tensor = load_dataset('../seq2seq/init_dataset/PNG/path', pad_maxlen=MAXLEN)
+    train_ds, target_ds = split_tensor(input_tensor, target_tensor, batch_size=BATCH_SIZE, test_ratio=0.0)
 
     max_input_size, max_target_size = input_tensor.shape[1], target_tensor.shape[1]
 
