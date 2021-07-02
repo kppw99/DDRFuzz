@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import tensorflow as tf
 from util import *
 from models import *
@@ -70,11 +72,15 @@ if __name__=='__main__':
     LSTM_DIM = 256
     BATCH_SIZE = 8
     EPOCHS = 30
+    TEST_RATIO = 0.0
 
-    input_tensor, target_tensor = load_dataset('../seq2seq/data', pad_maxlen=MAXLEN)
-    train_ds, test_ds = split_tensor(input_tensor, target_tensor, batch_size=BATCH_SIZE)
+    input_tensor, target_tensor = load_dataset('../seq2seq/init_dataset/PNG/path', pad_maxlen=MAXLEN)
+    train_ds, test_ds = split_tensor(input_tensor, target_tensor, batch_size=BATCH_SIZE, test_ratio=TEST_RATIO)
 
     model = Seq2seq(ENC_VOCAB_SIZE, DEC_VOCAB_SIZE, embedding_dim=EMBEDDING_DIM, units=LSTM_DIM,
                     sos=SOS, eos=EOS, maxlen=MAXLEN)
     model = train_seq2seq_model(model, train_ds, epochs=EPOCHS, early_stop_patience=5)
-    test_seq2seq_model(model, test_ds, verbose=True, save=False)
+
+    optimizer = tf.keras.optimizers.Adamax()
+    checkpoint = tf.train.Checkpoint(model=model, optimizer=optimizer)
+    checkpoint.save('./simple_s2s_model.ckpt')

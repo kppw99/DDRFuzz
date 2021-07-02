@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import time
 import tensorflow as tf
 from util import *
