@@ -134,3 +134,6 @@ projects/*/seed/
 
 # seq2seq directory for test using jupyter notebook
 seq2seq/*
+
+# directory for saved model files
+src/model/*
