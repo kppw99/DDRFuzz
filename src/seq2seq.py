@@ -86,7 +86,7 @@ if __name__=='__main__':
     optimizer = tf.keras.optimizers.Adamax()
     checkpoint = tf.train.Checkpoint(model=model, optimizer=optimizer)
 
-    dir_path = './model'
+    dir_path = './saved_model/s2s'
     if (os.path.isdir(dir_path) == False):
         os.mkdir(dir_path)
 

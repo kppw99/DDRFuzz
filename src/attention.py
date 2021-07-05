@@ -78,7 +78,7 @@ if __name__=='__main__':
     EMBEDDING_DIM = 64
     LSTM_DIM = 256
     BATCH_SIZE = 8
-    EPOCHS = 1
+    EPOCHS = 30
     TEST_RATIO = 0.0
 
     input_tensor, target_tensor = load_dataset('../seq2seq/init_dataset/PNG/path', pad_maxlen=MAXLEN)
@@ -90,7 +90,7 @@ if __name__=='__main__':
     optimizer = tf.keras.optimizers.Adamax()
     checkpoint = tf.train.Checkpoint(model=model, optimizer=optimizer)
 
-    dir_path = './model'
+    dir_path = './saved_model/attention'
     if (os.path.isdir(dir_path) == False):
         os.mkdir(dir_path)
 
