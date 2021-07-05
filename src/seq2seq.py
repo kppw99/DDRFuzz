@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+import os
+import time
 import tensorflow as tf
 from util import *
 from models import *
@@ -83,4 +85,12 @@ if __name__=='__main__':
 
     optimizer = tf.keras.optimizers.Adamax()
     checkpoint = tf.train.Checkpoint(model=model, optimizer=optimizer)
-    checkpoint.save('./simple_s2s_model.ckpt')
+
+    dir_path = './model'
+    if (os.path.isdir(dir_path) == False):
+        os.mkdir(dir_path)
+
+    filetime = time.strftime("_%Y%m%d-%H%M%S")
+    filename = 'simple_s2s_model' + filetime + '.ckpt'
+    fullname = os.path.join(dir_path, filename)
+    checkpoint.save(fullname)
