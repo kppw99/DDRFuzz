@@ -86,7 +86,7 @@ def test_seq2seq_model(model, test_ds, verbose=False, save=False):
             print('- predict:', prediction)
             print('====================')
 
-        if save is True:
+        if save is not False:
             vector_to_binary(prediction, data_path=save, savefile=str(idx))
 
 

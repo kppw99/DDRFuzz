@@ -12,13 +12,13 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', dest='model', type=str,
                         help='[seq2seq | attention | transformer]',
-                        default='attention')
-    parser.add_argument('--maxlen', dest='maxlen', type=int, default=500)
-    parser.add_argument('--emb_dim', dest='emb_dim', type=int, default=64)
-    parser.add_argument('--batch_size', dest='batch_size', type=int, default=16)
-    parser.add_argument('--epochs', dest='epochs', type=int, default=20)
-    parser.add_argument('--patience', dest='patience', type=int, default=None)
-    parser.add_argument('--path', dest='path', type=str, default='../seq2seq/data/')
+                        default='seq2seq')
+    parser.add_argument('--maxlen', dest='maxlen', type=int, default=1200)
+    parser.add_argument('--emb_dim', dest='emb_dim', type=int, default=128)
+    parser.add_argument('--batch_size', dest='batch_size', type=int, default=10)
+    parser.add_argument('--epochs', dest='epochs', type=int, default=2)
+    parser.add_argument('--patience', dest='patience', type=int, default=10)
+    parser.add_argument('--path', dest='path', type=str, default='../seq2seq/init_dataset/PNG/path')
     args = parser.parse_args()
 
     MAXLEN = args.maxlen
@@ -44,14 +44,14 @@ if __name__=='__main__':
 
         train_ds, test_ds = split_tensor(input_tensor, target_tensor,
                                          batch_size=BATCH_SIZE,
-                                         test_ratio=0.2)
+                                         test_ratio=0)
 
         model = Seq2seq(ENC_VOCAB_SIZE, DEC_VOCAB_SIZE,
                         embedding_dim=EMBEDDING_DIM, units=256,
                         sos=SOS, eos=EOS, maxlen=MAXLEN)
 
         model = train_seq2seq_model(model, train_ds, EPOCHS, early_stop_patience=PATIENCE)
-        test_seq2seq_model(model, test_ds, verbose=True, save=False)
+        test_seq2seq_model(model, train_ds, verbose=True, save=False)
 
     elif args.model == 'attention':
         print('\n[*] Start seq2seq with attention model ...')

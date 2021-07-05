@@ -5,7 +5,6 @@ import base64
 import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 
 BASE64_DICT = {
@@ -15,7 +14,7 @@ BASE64_DICT = {
     'f': 31, 'g': 32, 'h': 33, 'i': 34, 'j': 35, 'k': 36, 'l': 37, 'm': 38, 'n': 39, 'o': 40,
     'p': 41, 'q': 42, 'r': 43, 's': 44, 't': 45, 'u': 46, 'v': 47, 'w': 48, 'x': 49, 'y': 50,
     'z': 51, '0': 52, '1': 53, '2': 54, '3': 55, '4': 56, '5': 57, '6': 58, '7': 59, '8': 60,
-    '9': 61, '+': 62, '/': 63,  # BASE64
+    '9': 61, '+': 62, '/': 63,  # BASE64 (64)
     '=': 0,  # Padding
     '#': 65, # SOS
     '!': 66  # EOS
@@ -27,6 +26,7 @@ OUT_DIM = len(BASE64_DICT)
 
 SOS = BASE64_DICT['#']
 EOS = BASE64_DICT['!']
+PAD = BASE64_DICT['=']
 
 
 def binary_to_vector(filename, tag=0):
@@ -103,7 +103,7 @@ def split_tensor(input_tensor, target_tensor, batch_size=64, test_ratio=0.2, alg
     else:
         tr_X = input_tensor
         tr_y = target_tensor
-        
+
     buffer_size = len(tr_X)
 
     if algo is None:
