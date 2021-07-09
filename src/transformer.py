@@ -221,6 +221,29 @@ if __name__=='__main__':
     BATCH_SIZE = 8
     EPOCHS = 30
     TEST_RATIO = 0.0
+    MODE = 'train'  # train | test
+
+    # input_tensor, target_tensor = load_dataset('../seq2seq/init_dataset/PNG/path', pad_maxlen=MAXLEN)
+    # train_ds, test_ds = split_tensor(input_tensor, target_tensor,
+    #                                  batch_size=BATCH_SIZE, algo='transformer', test_ratio=TEST_RATIO)
+    #
+    # model = transformer(input_dim=MAXLEN, num_layers=4, dff=512,
+    #                     d_model=EMBEDDING_DIM, num_heads=4, dropout=0.3, name="transformer")
+    #
+    # model = train_transformer_model(model, train_ds, EPOCHS, MAXLEN, early_stop_patience=2)
+    # optimizer = tf.keras.optimizers.Adamax()
+    # checkpoint = tf.train.Checkpoint(model=model, optimizer=optimizer)
+    #
+    # dir_path = './saved_model/transformer'
+    # if (os.path.isdir(dir_path) == False):
+    #     os.mkdir(dir_path)
+    #
+    # filetime = time.strftime("_%Y%m%d-%H%M%S")
+    # filename = 'transformer_model' + filetime + '.ckpt'
+    # fullname = os.path.join(dir_path, filename)
+    # checkpoint.save(fullname)
+
+
 
     input_tensor, target_tensor = load_dataset('../seq2seq/init_dataset/PNG/path', pad_maxlen=MAXLEN)
     train_ds, test_ds = split_tensor(input_tensor, target_tensor,
@@ -229,15 +252,29 @@ if __name__=='__main__':
     model = transformer(input_dim=MAXLEN, num_layers=4, dff=512,
                         d_model=EMBEDDING_DIM, num_heads=4, dropout=0.3, name="transformer")
 
-    model = train_transformer_model(model, train_ds, EPOCHS, MAXLEN, early_stop_patience=2)
-    optimizer = tf.keras.optimizers.Adamax()
-    checkpoint = tf.train.Checkpoint(model=model, optimizer=optimizer)
-
     dir_path = './saved_model/transformer'
-    if (os.path.isdir(dir_path) == False):
-        os.mkdir(dir_path)
-
-    filetime = time.strftime("_%Y%m%d-%H%M%S")
-    filename = 'transformer_model' + filetime + '.ckpt'
+    filename = 'transformer_model_latest'
     fullname = os.path.join(dir_path, filename)
-    checkpoint.save(fullname)
+
+    if MODE == 'train':
+        model = train_transformer_model(model, train_ds, EPOCHS, MAXLEN, early_stop_patience=2)
+        if (os.path.isdir(dir_path) == False):
+            os.mkdir(dir_path)
+
+        cpfile = os.path.join(dir_path, 'checkpoint')
+        if (os.path.isfile(cpfile) == True):
+            filetime = time.strftime("_%Y%m%d-%H%M%S")
+            newcp = cpfile + filetime
+            fullname1 = fullname + '.index'
+            fullname2 = fullname + '.data-00000-of-00001'
+            newname1 = fullname + filetime + '.index'
+            newname2 = fullname + filetime + '.data-00000-of-00001'
+
+            os.rename(cpfile, os.path.join(dir_path, newcp))
+            os.rename(fullname1, os.path.join(dir_path, newname1))
+            os.rename(fullname2, os.path.join(dir_path, newname2))
+
+        model.save_weights(fullname)
+    elif MODE == 'test':
+        model.load_weights(fullname)
+        test_transformer_model(model, test_ds, MAXLEN, verbose=False, save=False)

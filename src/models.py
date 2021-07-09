@@ -138,7 +138,7 @@ def train_transformer_model(model, train_ds, epochs, maxlen, early_stop_patience
     return model
 
 
-def test_transformer_model(model, test_ds, maxlen, verbose=False, save=False):
+def test_transformer_model(model, test_ds, maxlen, verbose=False, save=None):
     def predict(model, sentence, maxlen):
         START_TOKEN, END_TOKEN = [SOS], [EOS]
         output = tf.expand_dims(START_TOKEN, 0)
@@ -151,12 +151,21 @@ def test_transformer_model(model, test_ds, maxlen, verbose=False, save=False):
         return tf.squeeze(output, axis=0)
 
     for idx, (test_seq, test_labels) in enumerate(test_ds):
-        prediction = predict(model, test_seq, maxlen)
+        try:
+            prediction = predict(model, test_seq, maxlen)
+        except:
+            print('[*] error:', idx)
+            continue
+        print('idx:', idx)
+
         if verbose is True:
             print('====================')
             print('- query:', test_seq)
             print('- label:', test_labels)
             print('- predict:', prediction)
             print('====================')
-        if save is True:
+
+        if save is not None:
+            if os.path.isdir(save) is False:
+                os.makedirs(save)
             vector_to_binary(prediction, data_path=save, savefile=str(idx))
