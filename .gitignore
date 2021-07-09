@@ -137,3 +137,6 @@ seq2seq/*
 
 # directory for saved model files
 src/model/*
+
+# directory for saved output files
+src/output/*
