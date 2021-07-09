@@ -46,7 +46,7 @@ def vector_to_binary(vector_data, data_path='./dataset/', savefile=None):
     ret_data = base64.b64decode(ret_data)
 
     if savefile is not None:
-        filename = data_path + savefile
+        filename = os.path.join(data_path, savefile)
         with open(filename, 'wb') as f:
             f.write(ret_data)
 

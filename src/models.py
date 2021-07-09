@@ -71,7 +71,7 @@ def train_seq2seq_model(model, train_ds, epochs, early_stop_patience=None):
     return model
 
 
-def test_seq2seq_model(model, test_ds, verbose=False, save=False):
+def test_seq2seq_model(model, test_ds, verbose=False, save=None):
     @tf.function  # Implement Inference
     def test_step(model, inputs):
         return model(inputs, training=False)
@@ -91,7 +91,9 @@ def test_seq2seq_model(model, test_ds, verbose=False, save=False):
             print('- predict:', prediction)
             print('====================')
 
-        if save is not False:
+        if save is not None:
+            if os.path.isdir(save) is False:
+                os.makedirs(save)
             vector_to_binary(prediction, data_path=save, savefile=str(idx))
 
 
