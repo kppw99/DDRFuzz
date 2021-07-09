@@ -77,7 +77,12 @@ def test_seq2seq_model(model, test_ds, verbose=False, save=False):
         return model(inputs, training=False)
 
     for idx, (test_seq, test_labels) in enumerate(test_ds):
-        prediction = test_step(model, test_seq)
+        try:
+            prediction = test_step(model, test_seq)
+        except:
+            print('[*] error:', idx)
+            continue
+        print('idx:', idx)
 
         if verbose is True:
             print('====================')
