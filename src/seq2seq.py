@@ -108,4 +108,4 @@ if __name__=='__main__':
         model.save_weights(fullname)
     elif MODE == 'test':
         model.load_weights(fullname)
-        test_seq2seq_model(model, test_ds, verbose=False, save=False)
+        test_seq2seq_model(model, test_ds, verbose=False, save='./output/PNG')
