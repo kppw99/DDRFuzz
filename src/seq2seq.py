@@ -83,8 +83,8 @@ if __name__=='__main__':
     model = Seq2seq(ENC_VOCAB_SIZE, DEC_VOCAB_SIZE, embedding_dim=EMBEDDING_DIM, units=LSTM_DIM,
                     sos=SOS, eos=EOS, maxlen=MAXLEN)
 
-    dir_path = './saved_model/s2s'
-    filename = 'simple_s2s_model_latest'
+    dir_path = './saved_model/s2s/'
+    filename = 'simple_s2s_model'
     fullname = os.path.join(dir_path, filename)
 
     if MODE == 'train':
@@ -92,18 +92,18 @@ if __name__=='__main__':
         if (os.path.isdir(dir_path) == False):
             os.mkdir(dir_path)
 
-        cpfile = os.path.join(dir_path, 'checkpoint')
-        if (os.path.isfile(cpfile) == True):
-            filetime = time.strftime("_%Y%m%d-%H%M%S")
-            newcp = cpfile + filetime
-            fullname1 = fullname + '.index'
-            fullname2 = fullname + '.data-00000-of-00001'
-            newname1 = fullname + filetime + '.index'
-            newname2 = fullname + filetime + '.data-00000-of-00001'
-
-            os.rename(cpfile, os.path.join(dir_path, newcp))
-            os.rename(fullname1, os.path.join(dir_path, newname1))
-            os.rename(fullname2, os.path.join(dir_path, newname2))
+        # cpfile = os.path.join(dir_path, 'checkpoint')
+        # if (os.path.isfile(cpfile) == True):
+        #     filetime = time.strftime("_%Y%m%d-%H%M%S")
+        #     newcp = cpfile + filetime
+        #     fullname1 = fullname + '.index'
+        #     fullname2 = fullname + '.data-00000-of-00001'
+        #     newname1 = fullname + filetime + '.index'
+        #     newname2 = fullname + filetime + '.data-00000-of-00001'
+        #
+        #     os.rename(cpfile, newcp)
+        #     os.rename(fullname1, newname1)
+        #     os.rename(fullname2, newname2)
 
         model.save_weights(fullname)
     elif MODE == 'test':
