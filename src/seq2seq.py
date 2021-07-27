@@ -73,9 +73,9 @@ if __name__=='__main__':
     EMBEDDING_DIM = 64
     LSTM_DIM = 256
     BATCH_SIZE = 8
-    EPOCHS = 1
+    EPOCHS = 30
     TEST_RATIO = 0.0
-    MODE = 'test' # train | test
+    MODE = 'train' # train | test
 
     input_tensor, target_tensor = load_dataset('../seq2seq/init_dataset/PNG/path', pad_maxlen=MAXLEN)
     train_ds, test_ds = split_tensor(input_tensor, target_tensor, batch_size=BATCH_SIZE, test_ratio=TEST_RATIO)
@@ -108,4 +108,4 @@ if __name__=='__main__':
         model.save_weights(fullname)
     elif MODE == 'test':
         model.load_weights(fullname)
-        test_seq2seq_model(model, test_ds, verbose=False, save='./output/PNG')
+        test_seq2seq_model(model, test_ds, verbose=False, save='./output/PNG/seq2seq/')

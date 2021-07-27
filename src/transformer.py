@@ -255,4 +255,4 @@ if __name__=='__main__':
         model.save_weights(fullname)
     elif MODE == 'test':
         model.load_weights(fullname)
-        test_transformer_model(model, test_ds, MAXLEN, verbose=False, save=False)
+        test_transformer_model(model, test_ds, MAXLEN, verbose=False, save='./output/PNG/transformer/')
