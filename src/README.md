@@ -18,9 +18,10 @@ pip install scikit-learn==0.24.2
 ```
 ### Usage
 ```
-python3 ./ddrfuzz.py --model [seq2seq|attention|transformer] --maxlen [int] --emb_dim [int] --batch_size [int] --epochs [int] --patience [int] --path [data directory]
+python3 ./ddrfuzz.py --model [seq2seq|attention|transformer] --mode [train|test] --maxlen [int] --emb_dim [int] --batch_size [int] --epochs [int] --patience [int] --path [data directory]
 ```
-- model: [seq2seq|attention|transformer] (default: attention)
+- model: [seq2seq|attention|transformer] (default: seq2seq)
+- mode: [train|test] (default: train)
 - maxlen: max length of input data (default: 500)
 - emb_dim: dimension of embedding layer (default: 64)
 - batch_size: batch size of training (default: 16)
