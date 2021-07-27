@@ -230,7 +230,7 @@ if __name__=='__main__':
     model = transformer(input_dim=MAXLEN, num_layers=4, dff=512,
                         d_model=EMBEDDING_DIM, num_heads=4, dropout=0.3, name="transformer")
 
-    dir_path = './saved_model/transformer'
+    dir_path = './model/transformer'
     filename = 'transformer_model_latest'
     fullname = os.path.join(dir_path, filename)
 

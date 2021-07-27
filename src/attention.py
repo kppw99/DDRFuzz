@@ -88,7 +88,7 @@ if __name__=='__main__':
     model = Attentions(ENC_VOCAB_SIZE, DEC_VOCAB_SIZE, embedding_dim=EMBEDDING_DIM, units=LSTM_DIM,
                       sos=SOS, eos=EOS, maxlen=MAXLEN)
 
-    dir_path = './saved_model/attention'
+    dir_path = './model/attention'
     filename = 'attention_model_latest'
     fullname = os.path.join(dir_path, filename)
 

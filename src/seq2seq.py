@@ -83,7 +83,7 @@ if __name__=='__main__':
     model = Seq2seq(ENC_VOCAB_SIZE, DEC_VOCAB_SIZE, embedding_dim=EMBEDDING_DIM, units=LSTM_DIM,
                     sos=SOS, eos=EOS, maxlen=MAXLEN)
 
-    dir_path = './saved_model/s2s/'
+    dir_path = './model/s2s/'
     filename = 'simple_s2s_model_latest'
     fullname = os.path.join(dir_path, filename)
 
