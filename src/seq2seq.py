@@ -73,9 +73,9 @@ if __name__=='__main__':
     EMBEDDING_DIM = 64
     LSTM_DIM = 256
     BATCH_SIZE = 8
-    EPOCHS = 30
+    EPOCHS = 1
     TEST_RATIO = 0.0
-    MODE = 'train' # train | test
+    MODE = 'test' # train | test
 
     input_tensor, target_tensor = load_dataset('../seq2seq/init_dataset/PNG/path', pad_maxlen=MAXLEN)
     train_ds, test_ds = split_tensor(input_tensor, target_tensor, batch_size=BATCH_SIZE, test_ratio=TEST_RATIO)
@@ -84,7 +84,7 @@ if __name__=='__main__':
                     sos=SOS, eos=EOS, maxlen=MAXLEN)
 
     dir_path = './saved_model/s2s/'
-    filename = 'simple_s2s_model'
+    filename = 'simple_s2s_model_latest'
     fullname = os.path.join(dir_path, filename)
 
     if MODE == 'train':
@@ -92,18 +92,18 @@ if __name__=='__main__':
         if (os.path.isdir(dir_path) == False):
             os.mkdir(dir_path)
 
-        # cpfile = os.path.join(dir_path, 'checkpoint')
-        # if (os.path.isfile(cpfile) == True):
-        #     filetime = time.strftime("_%Y%m%d-%H%M%S")
-        #     newcp = cpfile + filetime
-        #     fullname1 = fullname + '.index'
-        #     fullname2 = fullname + '.data-00000-of-00001'
-        #     newname1 = fullname + filetime + '.index'
-        #     newname2 = fullname + filetime + '.data-00000-of-00001'
-        #
-        #     os.rename(cpfile, newcp)
-        #     os.rename(fullname1, newname1)
-        #     os.rename(fullname2, newname2)
+        cpfile = os.path.join(dir_path, 'checkpoint')
+        if (os.path.isfile(cpfile) == True):
+            filetime = time.strftime("_%Y%m%d-%H%M%S")
+            newcp = cpfile + filetime
+            fullname1 = fullname + '.index'
+            fullname2 = fullname + '.data-00000-of-00001'
+            newname1 = fullname + filetime + '.index'
+            newname2 = fullname + filetime + '.data-00000-of-00001'
+
+            os.rename(cpfile, newcp)
+            os.rename(fullname1, newname1)
+            os.rename(fullname2, newname2)
 
         model.save_weights(fullname)
     elif MODE == 'test':
