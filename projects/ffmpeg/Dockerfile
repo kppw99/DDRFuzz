@@ -34,6 +34,7 @@ RUN tar -zxvf seed.tar.gz
 RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
 RUN cp -rf ${home}/source/ffmpeg ${home}/bin/
 
+RUN cp -rf ${pro_home}/afl-ddrfuzz.sh ${home}
 RUN cp -rf ${pro_home}/afl-fuzz.sh ${home}
 RUN cp -rf ${pro_home}/opt-seed.sh ${home}
 
