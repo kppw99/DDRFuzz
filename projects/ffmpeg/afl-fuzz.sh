@@ -30,4 +30,4 @@ fi
 output=$home/output
 rm -rf $output
 echo core >/proc/sys/kernel/core_pattern
-afl-fuzz $opt -i $input -o $output -- $bin -i @@ -f null /dev/null
+timeout -s INT 6h afl-fuzz $opt -i $input -o $output -- $bin -i @@ -f null /dev/null

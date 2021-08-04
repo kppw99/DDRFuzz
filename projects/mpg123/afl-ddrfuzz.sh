@@ -6,7 +6,7 @@ bin=$home/bin/mpg123
 opt='-m 100 -t 1000'
 
 s2s_dir=$seed_home/seq2seq
-att_dir=$seed_home/attentiont
+att_dir=$seed_home/attention
 tra_dir=$seed_home/transformer
 
 if [ -z $1 ]; then
