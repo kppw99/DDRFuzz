@@ -3,7 +3,7 @@
 home=/targets/ffmpeg
 seed_home=$home/ddrfuzz_seed
 bin=$home/bin/ffmpeg
-opt='-m 100 -t 10000+'
+opt='-m 1000 -t 10000+'
 
 s2s_dir=$seed_home/seq2seq
 att_dir=$seed_home/attention
@@ -17,7 +17,7 @@ elif [ $1 == 'transformer' ]; then
 	input=$tra_dir
 else
 	echo ''
-	echo './afl-ddrfuzz.sh {input_seed}'
+	echo './afl-fuzz.sh {input_seed}'
 	echo ''
 	echo 'Required input seed:'
 	echo '  - attention		: attention directory'
@@ -30,4 +30,4 @@ fi
 output=$home/output
 rm -rf $output
 echo core >/proc/sys/kernel/core_pattern
-timeout -s INT 6h afl-fuzz $opt -i $input -o $output -- $bin -w /dev/null @@ 
+timeout -s INT 6h afl-fuzz $opt -i $input -o $output -- $bin -i @@ -f null /dev/null
