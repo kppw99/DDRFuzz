@@ -28,7 +28,7 @@ class Early_Stopping(tf.keras.Model):
         return False
 
 
-def train_seq2seq_model(model, train_ds, epochs, early_stop_patience=None):
+def train_seq2seq_model(model, train_ds, epochs, early_stop_patience=None, stop_acc=1.0):
     @tf.function  # Implement training loop
     def train_step(model, inputs, labels, loss_object, optimizer, train_loss, train_accuracy):
         output_labels = labels[:, 1:]
@@ -68,6 +68,12 @@ def train_seq2seq_model(model, train_ds, epochs, early_stop_patience=None):
             if early_stopping(train_loss.result()):
                 break
 
+        if stop_acc <= train_accuracy.result():
+            print('[#] Achieve object accuracy!')
+            print('- Train Acc:', train_accuracy.result())
+            print('- Stop Acc:', stop_acc)
+            break
+
     return model
 
 
@@ -78,8 +84,8 @@ def test_seq2seq_model(model, test_ds, verbose=False, save=False):
 
     for idx, (test_seq, test_labels) in enumerate(test_ds):
         print('[*]', idx)
+        if idx == 72: continue
         prediction = test_step(model, test_seq)
-
         if verbose is True:
             print('====================')
             print('- query:', test_seq)
@@ -94,7 +100,18 @@ def test_seq2seq_model(model, test_ds, verbose=False, save=False):
             vector_to_binary(prediction, data_path=save, savefile=str(idx))
 
 
-def train_transformer_model(model, train_ds, epochs, maxlen, early_stop_patience=None):
+class AccuracyCallback(tf.keras.callbacks.Callback):
+    def __init__(self, threshold):
+        super(AccuracyCallback, self).__init__()
+        self.threshold = threshold
+
+    def on_epoch_end(self, epoch, logs=None):
+        accuracy = logs["accuracy"]
+        if accuracy >= self.threshold:
+            self.model.stop_training = True
+
+
+def train_transformer_model(model, train_ds, epochs, maxlen, early_stop_patience=None, stop_acc=1.0):
     class CustomSchedule(tf.keras.optimizers.schedules.LearningRateSchedule):
         def __init__(self, d_model, warmup_steps=4000):
             super(CustomSchedule, self).__init__()
@@ -125,12 +142,15 @@ def train_transformer_model(model, train_ds, epochs, maxlen, early_stop_patience
     if early_stop_patience is not None:
         early_stopping = EarlyStopping(monitor='loss', patience=early_stop_patience, verbose=True)
 
+    # acc_stopping = EarlyStopping(monitor='accuracy', baseline=1.0, mode=max, patience=0, verbose=True)
+    acc_stopping = AccuracyCallback(threshold=stop_acc)
+
     model.compile(optimizer=optimizer, loss=loss_function, metrics=[accuracy])
 
     if early_stop_patience is not None:
-        model.fit(train_ds, epochs=epochs, callbacks=[early_stopping])
+        model.fit(train_ds, epochs=epochs, callbacks=[early_stopping, acc_stopping])
     else:
-        model.fit(train_ds, epochs=epochs)
+        model.fit(train_ds, epochs=epochs, callbacks=[acc_stopping])
 
     return model
 
