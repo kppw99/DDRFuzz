@@ -84,7 +84,6 @@ def test_seq2seq_model(model, test_ds, verbose=False, save=False):
 
     for idx, (test_seq, test_labels) in enumerate(test_ds):
         print('[*]', idx)
-        if idx == 72: continue
         prediction = test_step(model, test_seq)
         if verbose is True:
             print('====================')
