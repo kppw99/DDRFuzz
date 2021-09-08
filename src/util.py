@@ -28,6 +28,8 @@ SOS = BASE64_DICT['#']
 EOS = BASE64_DICT['!']
 PAD = BASE64_DICT['=']
 
+NORM_COEF = 32.0
+
 
 def binary_to_vector(filename, tag=0):
     with open(filename, 'rb') as f:

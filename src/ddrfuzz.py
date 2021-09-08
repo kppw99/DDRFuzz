@@ -4,6 +4,7 @@ import os
 import argparse
 from util import *
 from models import *
+from wgan import *
 from seq2seq import *
 from attention import *
 from transformer import *
@@ -13,16 +14,16 @@ from keras.utils import plot_model
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', dest='model', type=str,
-                        help='[seq2seq | attention | transformer]',
-                        default='transformer')
+                        help='[seq2seq | attention | transformer | wgan]',
+                        default='wgan')
     parser.add_argument('--mode', dest='mode', type=str,
-                        help='[train | test]', default='train')
+                        help='[train | test]', default='test')
     parser.add_argument('--path', dest='path', type=str,
                         default='../seq2seq/init_dataset/MP3/sample/')
     parser.add_argument('--maxlen', dest='maxlen', type=int, default=1000)
     parser.add_argument('--emb_dim', dest='emb_dim', type=int, default=64)
     parser.add_argument('--batch_size', dest='batch_size', type=int, default=16)
-    parser.add_argument('--epochs', dest='epochs', type=int, default=300)
+    parser.add_argument('--epochs', dest='epochs', type=int, default=10)
     parser.add_argument('--patience', dest='patience', type=int, default=10)
     parser.add_argument('--stop_acc', dest='stop_acc', type=float, default=0.3)
     args = parser.parse_args()
@@ -157,6 +158,65 @@ if __name__=='__main__':
         else:
             model.load_weights(fullname)
             test_transformer_model(model, test_ds, MAXLEN, verbose=False, save='./output/PNG/transformer/')
+            # Transformer Model
+    elif args.model == 'wgan':
+        print('\n[*] Start wgan model ...')
+
+        DATA_DIM = MAXLEN
+
+        SEED_COUNT = 1000
+        SEED_PATH = './output/MP3/wgan/'
+
+        dir_path = './model/wgan'
+        filename = 'wgan_model_latest'
+        fullname = os.path.join(dir_path, filename)
+
+        d_model = get_discriminator(data_dim=DATA_DIM)
+        g_model = get_generator(data_dim=DATA_DIM)
+        wgan = WGAN(discriminator=d_model, generator=g_model, latent_dim=NOISE_DIM)
+
+        if args.mode == 'train':
+            train_data = (input_tensor - NORM_COEF) / NORM_COEF  # data normaliaze [-1.0, 1.0]
+
+            d_model.summary()
+            g_model.summary()
+
+            generator_optimizer = Adam(learning_rate=0.0002, beta_1=0.5, beta_2=0.9)
+            discriminator_optimizer = Adam(learning_rate=0.0002, beta_1=0.5, beta_2=0.9)
+            wgan.compile(d_optimizer=discriminator_optimizer, g_optimizer=generator_optimizer,
+                         g_loss_fn=generator_loss, d_loss_fn=discriminator_loss)
+
+            wgan.fit(train_data, batch_size=BATCH_SIZE, epochs=EPOCHS)
+
+            if (os.path.isdir(dir_path) == False):
+                os.mkdir(dir_path)
+
+            cpfile = os.path.join(dir_path, 'checkpoint')
+            if (os.path.isfile(cpfile) == True):
+                filetime = time.strftime("_%Y%m%d-%H%M%S")
+                newcp = cpfile + filetime
+                fullname1 = fullname + '.index'
+                fullname2 = fullname + '.data-00000-of-00001'
+                newname1 = fullname + filetime + '.index'
+                newname2 = fullname + filetime + '.data-00000-of-00001'
+
+                os.rename(cpfile, newcp)
+                os.rename(fullname1, newname1)
+                os.rename(fullname2, newname2)
+
+            wgan.save_weights(fullname)
+        else:
+            wgan.load_weights(fullname)
+
+            for idx in range(SEED_COUNT):
+                random_vectors = tf.random.normal(shape=(1, NOISE_DIM))
+                generated_data = wgan.generator(random_vectors)
+                generated_data = (generated_data * NORM_COEF) + NORM_COEF
+                generated_data = generated_data.numpy()
+                generated_data = generated_data.astype(int)[0]
+                if not os.path.isdir(SEED_PATH):
+                    os.makedirs(SEED_PATH, exist_ok=True)
+                vector_to_binary(generated_data, data_path=SEED_PATH, savefile=str(idx))
     else:
         print('Please enter the right model name')
         print('python3 ./ddrfuzz.py --model [seq2seq|attention|transformer]')
