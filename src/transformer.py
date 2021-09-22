@@ -216,14 +216,18 @@ def transformer(input_dim, num_layers, dff, d_model, num_heads, dropout, name="t
 
 
 if __name__=='__main__':
-    MAXLEN = 500
-    EMBEDDING_DIM = 64
-    BATCH_SIZE = 8
-    EPOCHS = 30
+    MAXLEN = 1000
+    EMBEDDING_DIM = 256
+    BATCH_SIZE = 16
+    EPOCHS = 73
     TEST_RATIO = 0.0
     MODE = 'train'  # train | test
+    #MODE = 'test'  # train | test
 
-    input_tensor, target_tensor = load_dataset('../seq2seq/init_dataset/PNG/path', pad_maxlen=MAXLEN)
+    input_tensor, target_tensor = load_dataset('../seq2seq/libtiff', pad_maxlen=MAXLEN)
+    #input_tensor, target_tensor = load_dataset('../seq2seq/libpng', pad_maxlen=MAXLEN)
+    #input_tensor, target_tensor = load_dataset('../seq2seq/init_dataset/PNG/path', pad_maxlen=MAXLEN)
+    #input_tensor, target_tensor = load_dataset('../seq2seq/TIFF', pad_maxlen=MAXLEN)
     train_ds, test_ds = split_tensor(input_tensor, target_tensor,
                                      batch_size=BATCH_SIZE, algo='transformer', test_ratio=TEST_RATIO)
 
@@ -255,4 +259,5 @@ if __name__=='__main__':
         model.save_weights(fullname)
     elif MODE == 'test':
         model.load_weights(fullname)
-        test_transformer_model(model, test_ds, MAXLEN, verbose=False, save='./output/PNG/transformer/')
+        #test_transformer_model(model, test_ds, MAXLEN, verbose=False, save='./output/PNG/transformer/')
+        test_transformer_model(model, test_ds, MAXLEN, verbose=False, save='./output/transformer')

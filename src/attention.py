@@ -75,14 +75,20 @@ class Attentions(tf.keras.Model):
 
 if __name__=='__main__':
     MAXLEN = 1000
-    EMBEDDING_DIM = 64
-    LSTM_DIM = 256
-    BATCH_SIZE = 8
-    EPOCHS = 30
+    EMBEDDING_DIM = 256
+    LSTM_DIM = 32
+    BATCH_SIZE = 32
+    EPOCHS = 2000
     TEST_RATIO = 0.0
     MODE = 'train'  # train | test
+    #MODE = 'test'  # train | test
 
-    input_tensor, target_tensor = load_dataset('../seq2seq/init_dataset/PNG/path', pad_maxlen=MAXLEN)
+
+    input_tensor, target_tensor = load_dataset('../seq2seq/libtiff', pad_maxlen=MAXLEN)
+    #input_tensor, target_tensor = load_dataset('../seq2seq/libpng', pad_maxlen=MAXLEN)
+    #input_tensor, target_tensor = load_dataset('../seq2seq/PNG', pad_maxlen=MAXLEN)
+    #input_tensor, target_tensor = load_dataset('../seq2seq/TIFF', pad_maxlen=MAXLEN)
+
     train_ds, test_ds = split_tensor(input_tensor, target_tensor, batch_size=BATCH_SIZE, test_ratio=TEST_RATIO)
 
     model = Attentions(ENC_VOCAB_SIZE, DEC_VOCAB_SIZE, embedding_dim=EMBEDDING_DIM, units=LSTM_DIM,
@@ -114,3 +120,4 @@ if __name__=='__main__':
     elif MODE == 'test':
         model.load_weights(fullname)
         test_seq2seq_model(model, test_ds, verbose=False, save='./output/PNG/attention/')
+        #test_seq2seq_model(model, test_ds, verbose=False, save='./output/TIFF/attention/')

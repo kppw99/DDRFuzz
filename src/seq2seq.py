@@ -69,15 +69,18 @@ class Seq2seq(tf.keras.Model):
 
 
 if __name__=='__main__':
-    MAXLEN = 1000
+    MAXLEN = 100
     EMBEDDING_DIM = 64
     LSTM_DIM = 256
-    BATCH_SIZE = 8
-    EPOCHS = 30
+    BATCH_SIZE = 16
+    EPOCHS = 34
     TEST_RATIO = 0.0
     MODE = 'train' # train | test
+    #MODE = 'test' # train | test
 
-    input_tensor, target_tensor = load_dataset('../seq2seq/init_dataset/PNG/path', pad_maxlen=MAXLEN)
+    input_tensor, target_tensor = load_dataset('../seq2seq/libtiff', pad_maxlen=MAXLEN)
+    #input_tensor, target_tensor = load_dataset('../seq2seq/libpng', pad_maxlen=MAXLEN)
+    #input_tensor, target_tensor = load_dataset('../seq2seq/TIFF', pad_maxlen=MAXLEN)
     train_ds, test_ds = split_tensor(input_tensor, target_tensor, batch_size=BATCH_SIZE, test_ratio=TEST_RATIO)
 
     model = Seq2seq(ENC_VOCAB_SIZE, DEC_VOCAB_SIZE, embedding_dim=EMBEDDING_DIM, units=LSTM_DIM,
@@ -109,3 +112,5 @@ if __name__=='__main__':
     elif MODE == 'test':
         model.load_weights(fullname)
         test_seq2seq_model(model, test_ds, verbose=False, save='./output/PNG/seq2seq/')
+        #test_seq2seq_model(model, test_ds, verbose=False, save='./output/TIFF/seq2seq/')
+
