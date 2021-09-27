@@ -27,7 +27,15 @@ else
 	exit 100
 fi
 
-output=$home/output
-rm -rf $output
+input1=$input
+input2=$home/valuable_seed/wgan
+
+output1=$home/output+origin
+output2=$home/output+wgan
 echo core >/proc/sys/kernel/core_pattern
-timeout -s INT 6h afl-fuzz $opt -i $input -o $output -- $bin -w /dev/null @@ 
+
+rm -rf $output1
+timeout -s INT 6h afl-fuzz $opt -i $input1 -o $output1 -- $bin -w /dev/null @@ 
+
+rm -rf $output2
+timeout -s INT 6h afl-fuzz $opt -i $input2 -o $output2 -- $bin -w /dev/null @@ 

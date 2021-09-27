@@ -14,6 +14,7 @@ WORKDIR ${home}/seed/copt/
 WORKDIR ${home}/seed/topt/
 WORKDIR ${home}/bin/
 WORKDIR ${home}/source/
+RUN apt-get -y install cron
 RUN wget https://www.mpg123.de/snapshot
 RUN tar -xvf snapshot --directory=${home}/source --strip-components=1
 RUN rm -rf snapshot
@@ -24,7 +25,7 @@ RUN git pull origin main
 # Build Target Program
 WORKDIR ${home}/source/build/
 RUN cp -rf ${pro_home}/build_new.sh .
-RUN bash build_new.sh
+RUN bash build_new.sh cov
 
 
 # Copy Seed Corpus and Fuzzing Executables
@@ -38,9 +39,13 @@ RUN cp -rf ${home}/source/build/src/mpg123 ${home}/bin/
 RUN cp -rf ${pro_home}/afl-ddrfuzz.sh ${home}
 RUN cp -rf ${pro_home}/afl-fuzz.sh ${home}
 RUN cp -rf ${pro_home}/opt-seed.sh ${home}
+RUN cp -rf ${pro_home}/cov-test.sh ${home}
 
 WORKDIR ${home}
 
 RUN tar -zxvf valuable_seed.tar.gz
+RUN (crontab -l 2>/dev/null; echo "*/10 * * * * /targets/ffmpeg/cov-test.sh -with args") | crontab -
+RUN mkdir cov
+RUN service cron start
 
-# docker build -t mpg123/ddrfuzz:latest . -f Dockerfile
+# docker build -t mpg123_gcov/ddrfuzz:latest . -f Dockerfile_for_gcov
