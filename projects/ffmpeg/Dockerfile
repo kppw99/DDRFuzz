@@ -32,6 +32,7 @@ WORKDIR ${pro_home}
 RUN tar -zxvf seed.tar.gz
 
 RUN cp -rf ${pro_home}/seed/* ${home}/seed/org/
+RUN cp -rf ${pro_home}/valuable_seed.tar.gz ${home}
 RUN cp -rf ${home}/source/ffmpeg ${home}/bin/
 
 RUN cp -rf ${pro_home}/afl-ddrfuzz.sh ${home}
@@ -39,5 +40,7 @@ RUN cp -rf ${pro_home}/afl-fuzz.sh ${home}
 RUN cp -rf ${pro_home}/opt-seed.sh ${home}
 
 WORKDIR ${home}
+
+RUN tar -zxvf valuable_seed.tar.gz
 
 # docker build -t ffmpeg/ddrfuzz:latest . -f Dockerfile
