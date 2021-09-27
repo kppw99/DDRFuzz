@@ -44,7 +44,7 @@ RUN cp -rf ${pro_home}/cov-test.sh ${home}
 WORKDIR ${home}
 
 RUN tar -zxvf valuable_seed.tar.gz
-RUN (crontab -l 2>/dev/null; echo "*/10 * * * * /targets/ffmpeg/cov-test.sh -with args") | crontab -
+RUN (crontab -l 2>/dev/null; echo "*/10 * * * * /targets/mpg123/cov-test.sh -with args") | crontab -
 RUN mkdir cov
 RUN service cron start
 
