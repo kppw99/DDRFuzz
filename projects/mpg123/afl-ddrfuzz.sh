@@ -47,4 +47,4 @@ timeout -s INT 6h afl-fuzz $opt -i $input2 -o $output2 -- $bin -w /dev/null @@
 rm -rf $output3
 timeout -s INT 6h afl-fuzz $opt -i $input3 -o $output3 -- $bin -w /dev/null @@ 
 rm -rf $output4
-timeout -s INT 6h afl-fuzz $opt -i $input4 -o $output5 -- $bin -w /dev/null @@ 
+timeout -s INT 6h afl-fuzz $opt -i $input4 -o $output4 -- $bin -w /dev/null @@ 
