@@ -219,10 +219,10 @@ if __name__=='__main__':
     MAXLEN = 1000
     EMBEDDING_DIM = 256
     BATCH_SIZE = 16
-    EPOCHS = 73
+    EPOCHS = 500
     TEST_RATIO = 0.0
-    MODE = 'train'  # train | test
-    #MODE = 'test'  # train | test
+    #MODE = 'train'  # train | test
+    MODE = 'test'  # train | test
 
     input_tensor, target_tensor = load_dataset('../seq2seq/libtiff', pad_maxlen=MAXLEN)
     #input_tensor, target_tensor = load_dataset('../seq2seq/libpng', pad_maxlen=MAXLEN)

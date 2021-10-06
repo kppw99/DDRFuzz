@@ -75,8 +75,8 @@ if __name__=='__main__':
     BATCH_SIZE = 16
     EPOCHS = 34
     TEST_RATIO = 0.0
-    MODE = 'train' # train | test
-    #MODE = 'test' # train | test
+    #MODE = 'train' # train | test
+    MODE = 'test' # train | test
 
     input_tensor, target_tensor = load_dataset('../seq2seq/libtiff', pad_maxlen=MAXLEN)
     #input_tensor, target_tensor = load_dataset('../seq2seq/libpng', pad_maxlen=MAXLEN)
@@ -111,6 +111,6 @@ if __name__=='__main__':
         model.save_weights(fullname)
     elif MODE == 'test':
         model.load_weights(fullname)
-        test_seq2seq_model(model, test_ds, verbose=False, save='./output/PNG/seq2seq/')
-        #test_seq2seq_model(model, test_ds, verbose=False, save='./output/TIFF/seq2seq/')
+        #test_seq2seq_model(model, test_ds, verbose=False, save='./output/PNG/seq2seq/')
+        test_seq2seq_model(model, test_ds, verbose=False, save='./output/TIFF/seq2seq/')
 

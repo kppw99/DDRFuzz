@@ -82,22 +82,25 @@ def test_seq2seq_model(model, test_ds, verbose=False, save=False):
     def test_step(model, inputs):
         return model(inputs, training=False)
 
-    for idx, (test_seq, test_labels) in enumerate(test_ds):
-        print('[*]', idx)
-        prediction = test_step(model, test_seq)
-        if verbose is True:
-            print('====================')
-            print('- query:', test_seq)
-            print('- label:', test_labels)
-            print('- predict:', prediction)
-            print('====================')
+    try:
+        for idx, (test_seq, test_labels) in enumerate(test_ds):
+            print('[*]', idx)
+            #if idx == 151 or idx == 557 or idx == 558 or idx == 2054: continue
+            prediction = test_step(model, test_seq)
+            if verbose is True:
+                print('====================')
+                print('- query:', test_seq)
+                print('- label:', test_labels)
+                print('- predict:', prediction)
+                print('====================')
 
-        if save is not False:
-            if not os.path.isdir(save):
-                os.makedirs(save, exist_ok=True)
-            prediction = prediction.cpu().numpy()[0]
-            vector_to_binary(prediction, data_path=save, savefile=str(idx))
-
+            if save is not False:
+                if not os.path.isdir(save):
+                    os.makedirs(save, exist_ok=True)
+                prediction = prediction.cpu().numpy()[0]
+                vector_to_binary(prediction, data_path=save, savefile=str(idx))
+    except Exception as e:
+        print(e)
 
 class AccuracyCallback(tf.keras.callbacks.Callback):
     def __init__(self, threshold):

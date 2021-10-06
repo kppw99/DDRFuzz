@@ -75,13 +75,13 @@ class Attentions(tf.keras.Model):
 
 if __name__=='__main__':
     MAXLEN = 1000
-    EMBEDDING_DIM = 256
+    EMBEDDING_DIM = 64
     LSTM_DIM = 32
-    BATCH_SIZE = 32
-    EPOCHS = 2000
+    BATCH_SIZE = 16
+    EPOCHS =100
     TEST_RATIO = 0.0
-    MODE = 'train'  # train | test
-    #MODE = 'test'  # train | test
+    #MODE = 'train'  # train | test
+    MODE = 'test'  # train | test
 
 
     input_tensor, target_tensor = load_dataset('../seq2seq/libtiff', pad_maxlen=MAXLEN)
@@ -119,5 +119,5 @@ if __name__=='__main__':
         model.save_weights(fullname)
     elif MODE == 'test':
         model.load_weights(fullname)
-        test_seq2seq_model(model, test_ds, verbose=False, save='./output/PNG/attention/')
-        #test_seq2seq_model(model, test_ds, verbose=False, save='./output/TIFF/attention/')
+        #test_seq2seq_model(model, test_ds, verbose=False, save='./output/PNG/attention/')
+        test_seq2seq_model(model, test_ds, verbose=False, save='./output/TIFF/attention/')
