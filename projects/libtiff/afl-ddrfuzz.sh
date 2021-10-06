@@ -1,6 +1,6 @@
 #!/bin/bash
 
-home=/targets/libspng
+home=/targets/libtiff
 seed_home=$home/valuable_seed
 #bin=$home/bin/bmp2tiff
 bin=$home/source/tools/bmp2tiff
